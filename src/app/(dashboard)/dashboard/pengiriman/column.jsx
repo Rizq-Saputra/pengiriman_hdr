@@ -80,26 +80,28 @@ const ActionCell = ({ row, onRefresh }) => {
               className="text-red-600"
               onSelect={(e) => e.preventDefault()}
             >
-              Delete
+              Hapus
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Anda yakin menghapus data ini?
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the
-                shipping data from our servers.
+                Data ini akan dihapus secara permanen. Anda tidak dapat
+                mengembalikan data yang telah dihapus.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Batalkan</AlertDialogCancel>
               <AlertDialogAction
                 className="bg-red-600 hover:bg-red-700"
                 onClick={() => {
                   handleDelete(data.pengiriman_id);
                 }}
               >
-                Delete
+                Hapus Data
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -129,10 +131,14 @@ export const columns = [
       const tanggal = row.getValue("tanggal_pengiriman");
       return (
         <span>
-          {new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(new Date(tanggal))}
+          {new Intl.DateTimeFormat("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }).format(new Date(tanggal))}
         </span>
       );
-    },    
+    },
   },
   {
     accessorKey: "Kendaraan.plat_nomor",

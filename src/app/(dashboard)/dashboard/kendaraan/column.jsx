@@ -29,7 +29,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
-
 const ActionCell = ({ row, onRefresh }) => {
   const { toast } = useToast();
   const data = row.original;
@@ -37,21 +36,44 @@ const ActionCell = ({ row, onRefresh }) => {
   const handleDelete = async (id) => {
     try {
       const response = await fetchWithAuth(`/api/kendaraan/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
         toast({
-          title: "Success",
-          description: "Kendaraan has been deleted successfully",
+          title: "Sukses",
+          description: "Kendaraan Berhasil Dihapus",
           variant: "success",
         });
         onRefresh();
+      } else {
+        const errorData = await response.json().catch(() => null);
+
+        if (
+          response.status === 500 ||
+          (errorData && errorData.message?.toLowerCase().includes("relasi"))
+        ) {
+          toast({
+            title: "Gagal Menghapus",
+            description:
+              "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Gagal Menghapus data",
+            description:
+              errorData?.message ||
+              "Terjadi kesalahan saat menghapus data | Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            variant: "destructive",
+          });
+        }
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "An unexpected error occurred",
+        title: "Gagal menghapus data",
+        description:
+          "Terjadi kesalahan saat menghapus data (Data tidak dapat dihapus karena masih memiliki relasi dengan data lain)",
         variant: "destructive",
       });
     }
@@ -69,9 +91,7 @@ const ActionCell = ({ row, onRefresh }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link href={`/dashboard/kendaraan/${data.kendaraan_id}/edit`}>
-          <DropdownMenuItem>
-            Edit
-          </DropdownMenuItem>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
         </Link>
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -79,24 +99,26 @@ const ActionCell = ({ row, onRefresh }) => {
               className="text-red-600"
               onSelect={(e) => e.preventDefault()}
             >
-              Delete
+              Hapus
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Anda yakin menghapus data ini?
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the
-                kendaraan data from our servers.
+                Data ini akan dihapus secara permanen. Anda tidak dapat
+                mengembalikan data yang telah dihapus.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Batalkan</AlertDialogCancel>
               <AlertDialogAction
                 className="bg-red-600 hover:bg-red-700"
                 onClick={() => handleDelete(data.kendaraan_id)}
               >
-                Delete
+                Hapus Data
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -120,19 +142,19 @@ export const columns = [
     header: "Kapasitas",
     cell: ({ row }) => {
       const kapasitas = row.getValue("kapasitas");
-      return `${kapasitas.toLocaleString('id-ID')} Kg`;
-    }
+      return `${kapasitas.toLocaleString("id-ID")} Kg`;
+    },
   },
   {
     accessorKey: "status_kendaraan",
     header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status_kendaraan");
-      
+
       const variants = {
-        "tersedia": "success",        // green
+        tersedia: "success", // green
         "sedang mengirim": "warning", // yellow
-        "dalam perbaikan": "destructive" // red
+        "dalam perbaikan": "destructive", // red
       };
 
       return (
@@ -140,13 +162,19 @@ export const columns = [
           {status.toLocaleUpperCase()}
         </Badge>
       );
-    }
+    },
   },
   {
     id: "actions",
     header: "Actions",
     cell: ({ row, table }) => {
-      return <ActionCell row={row} table={table} onRefresh={table.options.onRefresh} />;
+      return (
+        <ActionCell
+          row={row}
+          table={table}
+          onRefresh={table.options.onRefresh}
+        />
+      );
     },
   },
 ];

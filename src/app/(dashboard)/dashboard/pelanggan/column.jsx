@@ -1,6 +1,5 @@
 "use client";
 import { MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 
 import {
@@ -40,8 +39,8 @@ const ActionCell = ({ row, onRefresh }) => {
 
       if (response.ok) {
         toast({
-          title: "Success",
-          description: "Pelanggan berhasil dihapus",
+          title: "Sukses",
+          description: "Pelanggan Berhasil Dihapus",
           variant: "success",
         });
         onRefresh();
@@ -75,24 +74,26 @@ const ActionCell = ({ row, onRefresh }) => {
               className="text-red-600"
               onSelect={(e) => e.preventDefault()}
             >
-              Delete
+              Hapus
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Anda yakin menghapus data ini?
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the
-                pelanggan data from our servers.
+                Data ini akan dihapus secara permanen. Anda tidak dapat
+                mengembalikan data yang telah dihapus.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Batalkan</AlertDialogCancel>
               <AlertDialogAction
                 className="bg-red-600 hover:bg-red-700"
                 onClick={() => handleDelete(data.pelanggan_id)}
               >
-                Delete
+                Hapus Data
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

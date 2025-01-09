@@ -40,11 +40,33 @@ const ActionCell = ({ row, onRefresh }) => {
 
       if (response.ok) {
         toast({
-          title: "Success",
-          description: "Barang has been deleted successfully",
+          title: "Sukses",
+          description: "Barang Berhasil Dihapus",
           variant: "success",
         });
         onRefresh();
+      } else {
+        const errorData = await response.json().catch(() => null);
+
+        if (
+          response.status === 500 ||
+          (errorData && errorData.message?.toLowerCase().includes("relasi"))
+        ) {
+          toast({
+            title: "Gagal Menghapus",
+            description:
+              "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Gagal Menghapus data",
+            description:
+              errorData?.message ||
+              "Terjadi kesalahan saat menghapus data | Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            variant: "destructive",
+          });
+        }
       }
     } catch (error) {
       toast({
@@ -75,24 +97,26 @@ const ActionCell = ({ row, onRefresh }) => {
               className="text-red-600"
               onSelect={(e) => e.preventDefault()}
             >
-              Delete
+              Hapus
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Anda yakin menghapus data ini?
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the
-                barang data from our servers.
+                Data ini akan dihapus secara permanen. Anda tidak dapat
+                mengembalikan data yang telah dihapus.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Batalkan</AlertDialogCancel>
               <AlertDialogAction
                 className="bg-red-600 hover:bg-red-700"
                 onClick={() => handleDelete(data.barang_id)}
               >
-                Delete
+                Hapus Data
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
