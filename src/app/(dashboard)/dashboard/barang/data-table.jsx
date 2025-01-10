@@ -25,7 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
   const tableData = React.useMemo(
-    () => (loading ? Array(5).fill({}) : data),
+    () => (loading ? Array(10).fill({}) : data),
     [loading, data]
   );
   

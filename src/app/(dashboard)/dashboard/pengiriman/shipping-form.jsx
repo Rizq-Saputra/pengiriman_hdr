@@ -244,7 +244,7 @@ export default function ShippingForm({ initialData, mode }) {
         });
 
         if (!responsePengiriman.ok) {
-          throw new Error("Failed to create shipment");
+          throw new Error("Pastikan semua data terisi dengan benar");
         }
 
         const responseDetailPengiriman = await fetchWithAuth(
@@ -274,7 +274,7 @@ export default function ShippingForm({ initialData, mode }) {
         router.push("/dashboard/pengiriman");
       } catch (error) {
         showAlert({
-          title: "Error!",
+          title: "Gagal Membuat Pengiriman",
           text: error.message || "Something went wrong. Please try again.",
           icon: "error",
           confirmButtonText: "OK",
@@ -335,6 +335,7 @@ export default function ShippingForm({ initialData, mode }) {
                 <Input
                   type="number"
                   placeholder="Jumlah"
+                  min={1}
                   value={item.jumlah_barang}
                   className="w-20"
                   onChange={(e) =>
@@ -453,6 +454,7 @@ export default function ShippingForm({ initialData, mode }) {
             <Input
               type="number"
               placeholder="Masukkan ongkir"
+              min={0}
               value={ongkir}
               onChange={(e) => setOngkir(e.target.value)}
             />

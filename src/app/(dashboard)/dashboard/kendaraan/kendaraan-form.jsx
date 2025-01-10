@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useSwal } from "@/hooks/use-swal";
 import { useRouter } from "next/navigation";
@@ -31,7 +30,6 @@ export default function KendaraanForm({ initialData, mode }) {
 
   const router = useRouter();
 
-  // Definisikan skema validasi Zod
   const schema = z.object({
     plat_nomor: z.string().nonempty("Plat nomor harus diisi."),
     jenis_kendaraan: z.string().nonempty("Jenis kendaraan harus diisi."),
@@ -49,7 +47,6 @@ export default function KendaraanForm({ initialData, mode }) {
     const result = schema.safeParse(formData);
 
     if (!result.success) {
-      // Jika validasi gagal, set error dari Zod
       const errors = result.error.flatten();
       setError({ fieldErrors: errors.fieldErrors });
       return;

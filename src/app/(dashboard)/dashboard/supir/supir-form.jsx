@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 // Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond";
 
@@ -17,11 +16,20 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 // Import the plugin styles
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
-import { ToastAction } from "@/components/ui/toast";
 import { useSwal } from "@/hooks/use-swal";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
 
 registerPlugin(FilePondPluginImagePreview);
+
+// Defining the validation schema with Zod
+const supirSchema = z.object({
+  nama_supir: z.string().min(3, "Nama supir harus terdiri dari minimal 3 karakter"),
+  no_telepon: z.string().min(10, "Nomor telepon harus terdiri dari minimal 10 karakter"),
+  gambar_supir: z.string().optional(),
+  jumlah_antaran: z.number().min(0, "Jumlah antaran tidak bisa negatif"),
+  password: z.string().min(6, "Password harus terdiri dari minimal 6 karakter").optional(),
+});
 
 export default function SupirForm({ initialData, mode }) {
   const { showPostRedirectAlert, showAlert } = useSwal();
@@ -36,104 +44,77 @@ export default function SupirForm({ initialData, mode }) {
     password: "",
   });
 
-  const [errorData, setError] = React.useState(null);
+  const [errorData, setError] = React.useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    if (mode === "edit") {
-      // if the password is empty, don't send it
-      if (formData.password === "") {
-        delete formData.password;
-      }
 
-      const response = await fetchWithAuth(
-        `/api/supir/${initialData.data.supir_id}`,
-        {
-          method: "PATCH",
+    // Validate the form data with Zod schema
+    try {
+      supirSchema.parse(formData); // This will throw if validation fails
+
+      if (mode === "edit") {
+        // if the password is empty, don't send it
+        if (formData.password === "") {
+          delete formData.password;
+        }
+
+        const response = await fetchWithAuth(
+          `/api/supir/${initialData.data.supir_id}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify(formData),
+          }
+        );
+
+        if (!response.ok) {
+          setError({ general: "An unexpected error occurred" });
+        } else {
+          showPostRedirectAlert({
+            title: "Success",
+            text: "Supir berhasil diperbarui",
+            icon: "success",
+          });
+          router.push("/dashboard/supir");
+        }
+      } else {
+        const response = await fetchWithAuth(`/api/supir`, {
+          method: "POST",
           body: JSON.stringify(formData),
-        }
-      );
-      if (!response.ok) {
-        // Format the error message properly
-        if (Array.isArray(response.body.errors)) {
-          // If it's an array of errors, join them
-          setError(response.body.errors.map((err) => err.message).join(", "));
-        } else if (typeof response.body.errors === "object") {
-          // If it's an object with validation errors
-          setError(Object.values(response.body.errors).join(", "));
+        });
+
+        if (!response.ok) {
+          setError({ general: "An unexpected error occurred" });
         } else {
-          // Fallback error message
-          setError(
-            response.body.message ||
-              "An error occurred while submitting the form"
-          );
+          showPostRedirectAlert({
+            title: "Success",
+            text: "Supir berhasil ditambahkan",
+            icon: "success",
+          });
+          router.push("/dashboard/supir");
         }
-      }
 
-      if (response.ok) {
-        showPostRedirectAlert({
-          title: "Success",
-          text: "Supir berhasil diperbarui",
-          icon: "success",
-        });
-
-        router.push("/dashboard/supir");
-      } else {
-        showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
-          icon: "error",
+        // clear the form
+        setFormData({
+          nama_supir: "",
+          no_telepon: "",
+          gambar_supir: "",
+          jumlah_antaran: 0,
+          password: "",
         });
       }
-    } else {
-      const response = await fetchWithAuth(`/api/supir`, {
-        method: "POST",
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        console.log(response.body);
-        // Format the error message properly
-        if (Array.isArray(response.body.errors)) {
-          // If it's an array of errors, join them
-          setError(response.body.errors.map((err) => err.message).join(", "));
-        } else if (typeof response.body.errors === "object") {
-          // If it's an object with validation errors
-          setError(Object.values(response.body.errors).join(", "));
-        } else {
-          // Fallback error message
-          setError(
-            response.body.message ||
-              "An error occurred while submitting the form"
-          );
-        }
+    } catch (e) {
+      // Handle validation errors
+      if (e instanceof z.ZodError) {
+        const errorObj = e.errors.reduce((acc, err) => {
+          acc[err.path[0]] = err.message;
+          return acc;
+        }, {});
+        setError(errorObj);
       }
-
-      if (response.ok) {
-        showPostRedirectAlert({
-          title: "Success",
-          text: "Supir berhasil ditambahkan",
-          icon: "success",
-        });
-
-        router.push("/dashboard/supir");
-      } else {
-        showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
-          icon: "error",
-        });
-      }
-
-      // clear the form
-      setFormData({
-        nama_supir: "",
-        no_telepon: "",
-        gambar_supir: "",
-        jumlah_antaran: 0,
-        password: "",
-      });
     }
+
     setIsLoading(false);
   };
 
@@ -154,6 +135,9 @@ export default function SupirForm({ initialData, mode }) {
               }
               placeholder="Masukkan nama supir"
             />
+            {errorData.nama_supir && (
+              <p className="text-red-500 text-sm">{errorData.nama_supir}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -163,7 +147,6 @@ export default function SupirForm({ initialData, mode }) {
               server={{
                 url: `${process.env.NEXT_PUBLIC_BACKEND_API_URL}`,
                 load: (source, load, error) => {
-                  console.log(source);
                   if (!source) {
                     error("No source provided");
                     return;
@@ -181,37 +164,23 @@ export default function SupirForm({ initialData, mode }) {
                   url: "/api/uploads",
                   method: "POST",
                   onload: (response) => {
-                    // console.log("Process response:", response);
                     const parsedResponse = JSON.parse(response);
-                    // console.log("Parsed path:", parsedResponse.path);
-
-                    setFormData((prev) => {
-                      // console.log("Previous formData:", prev);
-                      const newState = {
-                        ...prev,
-                        gambar_supir: parsedResponse.path,
-                      };
-                      // console.log("New formData state:", newState);
-                      return newState;
-                    });
-
+                    setFormData((prev) => ({
+                      ...prev,
+                      gambar_supir: parsedResponse.path,
+                    }));
                     return parsedResponse.path;
                   },
                 },
               }}
               onremovefile={(error, file) => {
-                console.log("onremovefile", error, file);
-
-                // Check if this is a user-initiated removal and not an automatic replacement
                 if (file.origin !== 1) {
-                  // 1 indicates user removal
                   fetch(
                     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api${file.serverId}`,
                     {
                       method: "DELETE",
                     }
                   );
-
                   setFormData((prev) => ({
                     ...prev,
                     gambar_supir: null,
@@ -223,7 +192,6 @@ export default function SupirForm({ initialData, mode }) {
               acceptedFileTypes={["image/*"]}
               plugins={[FilePondPluginImagePreview]}
               allowRevert={true}
-              // conditionally set the files prop
               {...(mode === "edit" && formData.gambar_supir
                 ? {
                     files: [
@@ -235,6 +203,9 @@ export default function SupirForm({ initialData, mode }) {
                   }
                 : {})}
             />
+            {errorData.gambar_supir && (
+              <p className="text-red-500 text-sm">{errorData.gambar_supir}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -248,6 +219,9 @@ export default function SupirForm({ initialData, mode }) {
               }
               placeholder="Masukkan password"
             />
+            {errorData.password && (
+              <p className="text-red-500 text-sm">{errorData.password}</p>
+            )}
             {mode === "edit" && (
               <p className="text-sm text-gray-500">
                 Kosongkan jika tidak ingin mengubah password
@@ -269,6 +243,9 @@ export default function SupirForm({ initialData, mode }) {
               }
               placeholder="Masukkan jumlah antaran"
             />
+            {errorData.jumlah_antaran && (
+              <p className="text-red-500 text-sm">{errorData.jumlah_antaran}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -281,9 +258,14 @@ export default function SupirForm({ initialData, mode }) {
               }
               placeholder="Masukkan nomor telepon"
             />
+            {errorData.no_telepon && (
+              <p className="text-red-500 text-sm">{errorData.no_telepon}</p>
+            )}
           </div>
 
-          {errorData && <p className="text-red-500">{errorData}</p>}
+          {errorData.general && (
+            <p className="text-red-500 text-sm">{errorData.general}</p>
+          )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading

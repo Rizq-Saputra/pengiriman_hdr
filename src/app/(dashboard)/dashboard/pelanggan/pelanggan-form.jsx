@@ -8,10 +8,11 @@ import { Label } from "@/components/ui/label";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useSwal } from "@/hooks/use-swal";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
 
 export default function PelangganForm({ initialData, mode }) {
-  const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [fieldErrors, setFieldErrors] = React.useState({});
   const { showPostRedirectAlert, showAlert } = useSwal();
   const router = useRouter();
 
@@ -21,94 +22,82 @@ export default function PelangganForm({ initialData, mode }) {
     no_telepon: initialData?.data?.no_telepon || "",
   });
 
+  const schema = z.object({
+    nama_pelanggan: z.string().nonempty("Nama harus diisi."),
+    email: z
+      .string()
+      .nonempty("Email harus diisi.")
+      .email("Format email tidak valid."),
+    no_telepon: z
+      .string()
+      .nonempty("No telepon harus diisi.")
+      .regex(/^\d+$/, "No telepon harus berupa angka."),
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validasi data form menggunakan Zod
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      // Tangani error validasi
+      setFieldErrors(result.error.flatten().fieldErrors);
+      return;
+    }
+
+    // Reset error jika validasi berhasil
+    setFieldErrors({});
     setIsLoading(true);
-    if (mode === "edit") {
-      const response = await fetchWithAuth(
-        `/api/pelanggan/${initialData.data.pelanggan_id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(formData),
-        }
-      );
 
-      if (!response.ok) {
-        if (Array.isArray(response.body.errors)) {
-          setError(response.body.errors.map((err) => err.message).join(", "));
-        } else if (typeof response.body.errors === "object") {
-          setError(Object.values(response.body.errors).join(", "));
-        } else {
-          setError(
-            response.body.message ||
-              "An error occurred while submitting the form"
-          );
-        }
+    try {
+      let response;
+
+      if (mode === "edit") {
+        response = await fetchWithAuth(
+          `/api/pelanggan/${initialData.data.pelanggan_id}`,
+          {
+            method: "PUT",
+            body: JSON.stringify(formData),
+          }
+        );
       } else {
-        setError(null);
-      }
-
-      setIsLoading(false);
-
-      if (response.ok) {
-        showPostRedirectAlert({
-          title: "Success",
-          text: "Pelanggan berhasil diperbarui",
-          icon: "success",
-        });
-
-        router.push("/dashboard/pelanggan");
-      }else{
-        showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
-          icon: "error",
+        response = await fetchWithAuth(`/api/pelanggan`, {
+          method: "POST",
+          body: JSON.stringify(formData),
         });
       }
-    } else {
-      const response = await fetchWithAuth(`/api/pelanggan`, {
-        method: "POST",
-        body: JSON.stringify(formData),
-      });
 
       if (!response.ok) {
-        if (Array.isArray(response.body.errors)) {
-          setError(response.body.errors.map((err) => err.message).join(", "));
-        } else if (typeof response.body.errors === "object") {
-          setError(Object.values(response.body.errors).join(", "));
-        } else {
-          setError(
-            response.body.message ||
-              "An error occurred while submitting the form"
+        const errors = response.body.errors;
+        if (errors) {
+          setFieldErrors(
+            Array.isArray(errors)
+              ? { global: errors.map((err) => err.message).join(", ") }
+              : errors
           );
+        } else {
+          throw new Error("Terjadi kesalahan saat mengirim data.");
         }
+        return;
       }
 
-      setIsLoading(false);
-
-      if (response.ok) {
-        showPostRedirectAlert({
-          title: "Success",
-          text: "Pelanggan berhasil ditambahkan",
-          icon: "success",
-        });
-
-        router.push("/dashboard/pelanggan");
-      }else{
-        showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
-          icon: "error",
-        });
-      }
-
-      // clear error
-      setError(null);
-      setFormData({
-        nama_pelanggan: "",
-        email: "",
-        no_telepon: "",
+      // Tampilkan notifikasi sukses
+      showPostRedirectAlert({
+        title: "Success",
+        text:
+          mode === "edit"
+            ? "Pelanggan berhasil diperbarui"
+            : "Pelanggan berhasil ditambahkan",
+        icon: "success",
       });
+
+      // Redirect ke halaman pelanggan
+      router.push("/dashboard/pelanggan");
+    } catch (err) {
+      setFieldErrors({ global: err.message });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,6 +120,11 @@ export default function PelangganForm({ initialData, mode }) {
               }
               placeholder="Masukkan nama pelanggan"
             />
+            {fieldErrors.nama_pelanggan && (
+              <p className="text-red-500 text-sm">
+                {fieldErrors.nama_pelanggan[0]}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -144,6 +138,9 @@ export default function PelangganForm({ initialData, mode }) {
               }
               placeholder="Masukkan email"
             />
+            {fieldErrors.email && (
+              <p className="text-red-500 text-sm">{fieldErrors.email[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -156,9 +153,16 @@ export default function PelangganForm({ initialData, mode }) {
               }
               placeholder="Masukkan nomor telepon"
             />
+            {fieldErrors.no_telepon && (
+              <p className="text-red-500 text-sm">
+                {fieldErrors.no_telepon[0]}
+              </p>
+            )}
           </div>
 
-          {error && <p className="text-red-500">{error}</p>}
+          {fieldErrors.global && (
+            <p className="text-red-500 text-sm">{fieldErrors.global}</p>
+          )}
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading

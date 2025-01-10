@@ -9,7 +9,7 @@ export default function TableClient() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
-  const fetchData = useCallback(async (pageIndex = 0, pageSize = 5) => {
+  const fetchData = useCallback(async (pageIndex = 0, pageSize = 10) => {
     setLoading(true);
     try {
       const response = await fetchWithAuth(

@@ -15,13 +15,33 @@ import {
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useSwal } from "@/hooks/use-swal";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+
+// Skema validasi menggunakan Zod
+const barangSchema = z.object({
+  nama_barang: z
+    .string()
+    .nonempty("Nama barang harus diisi.")
+    .max(255, "Nama barang tidak boleh lebih dari 255 karakter."),
+  kategori: z.string().nonempty("Kategori harus dipilih."),
+  berat: z
+    .number({
+      invalid_type_error: "Berat harus berupa angka.",
+    })
+    .positive("Berat harus lebih dari 0."),
+  harga: z
+    .number({
+      invalid_type_error: "Harga harus berupa angka.",
+    })
+    .positive("Harga harus lebih dari 0."),
+});
 
 export default function BarangForm({ initialData, mode }) {
   const { showPostRedirectAlert, showAlert } = useSwal();
-
   const router = useRouter();
   const [error, setError] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
+
   const [formData, setFormData] = React.useState({
     nama_barang: initialData?.data?.nama_barang || "",
     kategori: initialData?.data?.kategori || "",
@@ -32,87 +52,68 @@ export default function BarangForm({ initialData, mode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Validasi data menggunakan Zod
+    const validationResult = barangSchema.safeParse({
+      ...formData,
+      berat: parseFloat(formData.berat),
+      harga: parseFloat(formData.harga),
+    });
+
+    if (!validationResult.success) {
+      setError(validationResult.error.flatten().fieldErrors);
+      setIsLoading(false);
+      return;
+    }
+
+    setError(null);
+
+    const payload = validationResult.data;
+
     if (mode === "edit") {
       const response = await fetchWithAuth(
         `/api/barang/${initialData.data.barang_id}`,
         {
           method: "PUT",
-          body: JSON.stringify(formData),
+          body: JSON.stringify(payload),
         }
       );
 
       if (!response.ok) {
-        if (Array.isArray(response.body.errors)) {
-          setError(response.body.errors.map((err) => err.message).join(", "));
-        } else if (typeof response.body.errors === "object") {
-          setError(Object.values(response.body.errors).join(", "));
-        } else {
-          setError(
-            response.body.message ||
-              "An error occurred while submitting the form"
-          );
-        }
+        setError(
+          response.body?.message || "Terjadi kesalahan saat memperbarui barang."
+        );
       } else {
-        setError(null);
-      }
-
-      if (response.ok) {
         showPostRedirectAlert({
           title: "Success!",
-          text: "Pengiriman berhasil diupdate",
+          text: "Barang berhasil diperbarui.",
           icon: "success",
-          confirmButtonText: "OK",
         });
         router.push("/dashboard/barang");
-      } else {
-        showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
-          icon: "error",
-        });
       }
     } else {
       const response = await fetchWithAuth(`/api/barang`, {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        if (Array.isArray(response.body.errors)) {
-          setError(response.body.errors.map((err) => err.message).join(", "));
-        } else if (typeof response.body.errors === "object") {
-          setError(Object.values(response.body.errors).join(", "));
-        } else {
-          setError(
-            response.body.message ||
-              "An error occurred while submitting the form"
-          );
-        }
+        setError(
+          response.body?.message || "Terjadi kesalahan saat menambahkan barang."
+        );
       } else {
-        setError(null);
         setFormData({
           nama_barang: "",
           kategori: "",
           berat: 0,
           harga: 0,
         });
-      }
-
-      if (response.ok) {
         showPostRedirectAlert({
           title: "Success!",
-          text: "Barang berhasil ditambahkan",
+          text: "Barang berhasil ditambahkan.",
           icon: "success",
-          confirmButtonText: "OK",
         });
-
         router.push("/dashboard/barang");
-      } else {
-        showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
-          icon: "error",
-        });
       }
     }
 
@@ -138,6 +139,9 @@ export default function BarangForm({ initialData, mode }) {
               }
               placeholder="Masukkan nama barang"
             />
+            {error?.nama_barang && (
+              <p className="text-red-500">{error.nama_barang[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -157,6 +161,9 @@ export default function BarangForm({ initialData, mode }) {
                 <SelectItem value="Kategori 3">Kategori 3</SelectItem>
               </SelectContent>
             </Select>
+            {error?.kategori && (
+              <p className="text-red-500">{error.kategori[0]}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -165,11 +172,13 @@ export default function BarangForm({ initialData, mode }) {
               id="berat"
               type="number"
               value={formData.berat}
+              min={0}
               onChange={(e) =>
-                setFormData({ ...formData, berat: parseInt(e.target.value) })
+                setFormData({ ...formData, berat: e.target.value })
               }
               placeholder="Masukkan berat"
             />
+            {error?.berat && <p className="text-red-500">{error.berat[0]}</p>}
           </div>
 
           <div className="space-y-2">
@@ -177,16 +186,22 @@ export default function BarangForm({ initialData, mode }) {
             <Input
               id="harga"
               type="number"
+              min={0}
               value={formData.harga}
               onChange={(e) =>
-                setFormData({ ...formData, harga: parseInt(e.target.value) })
+                setFormData({ ...formData, harga: e.target.value })
               }
               placeholder="Masukkan harga"
             />
+            {error?.harga && <p className="text-red-500">{error.harga[0]}</p>}
           </div>
 
-          <Button type="submit" className="w-full">
-            {mode === "edit" ? "Simpan Perubahan" : "Tambah Barang"}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading
+              ? "Menyimpan..."
+              : mode === "edit"
+              ? "Simpan Perubahan"
+              : "Tambah Barang"}
           </Button>
         </form>
       </CardContent>
