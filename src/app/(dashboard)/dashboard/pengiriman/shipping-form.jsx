@@ -433,6 +433,7 @@ export default function ShippingForm({ initialData, mode }) {
               id="address"
               placeholder="Masukkan alamat"
               className="min-h-[100px]"
+              required
               value={alamat}
               onChange={(e) => setAlamat(e.target.value)}
             />
@@ -444,6 +445,7 @@ export default function ShippingForm({ initialData, mode }) {
               id="description"
               placeholder="Masukkan deskripsi"
               className="min-h-[100px]"
+              required
               value={deskripsi}
               onChange={(e) => setDeskripsi(e.target.value)}
             />
