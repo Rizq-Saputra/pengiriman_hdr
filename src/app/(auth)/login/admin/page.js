@@ -69,9 +69,9 @@ export default function Login() {
       }
 
       const { token, refreshToken } = await res.json();
-      localStorage.setItem("token", token); // Save JWT in localStorage
-      localStorage.setItem("refreshToken", refreshToken); // Save refresh token in localStorage
-      router.push("/dashboard"); // Redirect to a protected page
+      localStorage.setItem("token", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      router.push("/dashboard");
     } catch (err) {
       setError(err.message);
       // Show error using SweetAlert
@@ -102,7 +102,7 @@ export default function Login() {
               <Input
                 id="username"
                 type="text"
-                placeholder="Masukkan Nama Anda"
+                placeholder="Masukkan Nama"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />

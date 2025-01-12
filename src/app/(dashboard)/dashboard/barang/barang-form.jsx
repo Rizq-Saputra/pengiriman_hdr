@@ -24,11 +24,6 @@ const barangSchema = z.object({
     .nonempty("Nama barang harus diisi.")
     .max(255, "Nama barang tidak boleh lebih dari 255 karakter."),
   kategori: z.string().nonempty("Kategori harus dipilih."),
-  berat: z
-    .number({
-      invalid_type_error: "Berat harus berupa angka.",
-    })
-    .positive("Berat harus lebih dari 0."),
   harga: z
     .number({
       invalid_type_error: "Harga harus berupa angka.",
@@ -45,7 +40,6 @@ export default function BarangForm({ initialData, mode }) {
   const [formData, setFormData] = React.useState({
     nama_barang: initialData?.data?.nama_barang || "",
     kategori: initialData?.data?.kategori || "",
-    berat: initialData?.data?.berat || 0,
     harga: initialData?.data?.harga || 0,
   });
 
@@ -56,7 +50,6 @@ export default function BarangForm({ initialData, mode }) {
     // Validasi data menggunakan Zod
     const validationResult = barangSchema.safeParse({
       ...formData,
-      berat: parseFloat(formData.berat),
       harga: parseFloat(formData.harga),
     });
 
@@ -85,7 +78,7 @@ export default function BarangForm({ initialData, mode }) {
         );
       } else {
         showPostRedirectAlert({
-          title: "Success!",
+          title: "Sukses",
           text: "Barang berhasil diperbarui.",
           icon: "success",
         });
@@ -96,7 +89,7 @@ export default function BarangForm({ initialData, mode }) {
         method: "POST",
         body: JSON.stringify(payload),
       });
-
+      console.log(response);
       if (!response.ok) {
         setError(
           response.body?.message || "Terjadi kesalahan saat menambahkan barang."
@@ -105,7 +98,6 @@ export default function BarangForm({ initialData, mode }) {
         setFormData({
           nama_barang: "",
           kategori: "",
-          berat: 0,
           harga: 0,
         });
         showPostRedirectAlert({
@@ -164,21 +156,6 @@ export default function BarangForm({ initialData, mode }) {
             {error?.kategori && (
               <p className="text-red-500">{error.kategori[0]}</p>
             )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="berat">Berat (kg)</Label>
-            <Input
-              id="berat"
-              type="number"
-              value={formData.berat}
-              min={0}
-              onChange={(e) =>
-                setFormData({ ...formData, berat: e.target.value })
-              }
-              placeholder="Masukkan berat"
-            />
-            {error?.berat && <p className="text-red-500">{error.berat[0]}</p>}
           </div>
 
           <div className="space-y-2">

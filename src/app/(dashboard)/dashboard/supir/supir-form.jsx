@@ -72,7 +72,7 @@ export default function SupirForm({ initialData, mode }) {
           setError({ general: "An unexpected error occurred" });
         } else {
           showPostRedirectAlert({
-            title: "Success",
+            title: "Sukses",
             text: "Supir berhasil diperbarui",
             icon: "success",
           });
@@ -88,7 +88,7 @@ export default function SupirForm({ initialData, mode }) {
           setError({ general: "An unexpected error occurred" });
         } else {
           showPostRedirectAlert({
-            title: "Success",
+            title: "Sukses",
             text: "Supir berhasil ditambahkan",
             icon: "success",
           });

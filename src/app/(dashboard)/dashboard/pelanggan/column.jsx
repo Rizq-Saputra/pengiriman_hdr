@@ -1,7 +1,6 @@
 "use client";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,13 +20,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
+import Swal from "sweetalert2"; // Import SweetAlert2
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 const ActionCell = ({ row, onRefresh }) => {
-  const { toast } = useToast();
   const data = row.original;
 
   const handleDelete = async (id) => {
@@ -38,18 +34,27 @@ const ActionCell = ({ row, onRefresh }) => {
       });
 
       if (response.ok) {
-        toast({
+        Swal.fire({
           title: "Sukses",
-          description: "Pelanggan Berhasil Dihapus",
-          variant: "success",
+          text: "Pelanggan Berhasil Dihapus",
+          icon: "success",
+          confirmButtonText: "OK",
         });
         onRefresh();
+      } else {
+        Swal.fire({
+          title: "Gagal menghapus data",
+          text: "Pastikan data pelanggan tidak memiliki relasi dengan data lain",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     } catch (error) {
-      toast({
+      Swal.fire({
         title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
+        text: "An unexpected error occurred",
+        icon: "error",
+        confirmButtonText: "OK",
       });
     }
   };

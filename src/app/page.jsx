@@ -1,21 +1,59 @@
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
+  CardContent,
 } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 
 export default function Home() {
-  // redirect to /login if not authenticated
-  // redirect("/login");
+  const produkData = [
+    {
+      id: 1,
+      title: "Produk 1",
+      description: "Deskripsi produk 1",
+      imageUrl: "/product.png",
+    },
+    {
+      id: 2,
+      title: "Produk 2",
+      description: "Deskripsi produk 2",
+      imageUrl: "/product.png",
+    },
+    {
+      id: 3,
+      title: "Produk 3",
+      description: "Deskripsi produk 3",
+      imageUrl: "/product.png",
+    },
+    {
+      id: 4,
+      title: "Produk 4",
+      description: "Deskripsi produk 4",
+      imageUrl: "/product.png",
+    },
+    {
+      id: 5,
+      title: "Produk 5",
+      description: "Deskripsi produk 5",
+      imageUrl: "/product.png",
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 font-inter">
       <header className="w-full flex justify-between md:px-40 px-10 items-center mt-10">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 cursor-pointer">
           <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
             <Image
               width={32}
@@ -26,9 +64,11 @@ export default function Home() {
           </div>
           <span className="text-xl font-bold">UD Haderah</span>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-          Masuk Ke Akun
-        </button>
+        <Link href={"/pelanggan"}>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+            Lihat Pengiriman
+          </button>
+        </Link>
       </header>
       <main className="mt-10">
         <section className="flex flex-col md:flex-row items-center justify-between text-center px-6 w-full max-w-7xl">
@@ -43,7 +83,7 @@ export default function Home() {
               cepat
             </p>
             <button className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition mb-14">
-              Lihat Selengkapnya
+              Baca Selengkapnya
             </button>
           </div>
 
@@ -142,33 +182,94 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="mt-16 flex flex-col items-center justify-center w-full max-w-7xl px-6 mb-10">
+          <div className="flex flex-col items-center justify-center text-center">
+            <h2 className="text-3xl font-bold mb-4">Produk Kami</h2>
+            <Carousel
+              opts={{
+                align: "start",
+              }}
+              className="w-full max-w-xs md:max-w-5xl"
+            >
+              <CarouselContent>
+                {produkData.map((produk) => (
+                  <CarouselItem
+                    key={produk.id}
+                    className="md:basis-1/2 lg:basis-1/3"
+                  >
+                    <div className="p-1">
+                      <Card>
+                        <CardContent className="flex flex-col aspect-square items-center justify-center p-6">
+                          {/* Gambar produk */}
+                          <Image
+                            src={produk.imageUrl}
+                            alt={produk.title}
+                            width={400}
+                            height={400}
+                            className="rounded-md"
+                          />
+                          {/* Deskripsi produk */}
+                          <CardHeader>
+                            <CardTitle className="text-xl font-semibold">
+                              {produk.title}
+                            </CardTitle>
+                            <CardDescription className="text-gray-600">
+                              {produk.description}
+                            </CardDescription>
+                          </CardHeader>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+
+              {/* Navigation buttons */}
+              <CarouselPrevious className="hidden md:block" />
+              <CarouselNext className="hidden md:block" />
+            </Carousel>
+          </div>
+        </section>
+
         <section className="mt-16 flex flex-col md:flex-row items-center justify-between w-full max-w-7xl px-6 mb-10">
           {/* Bagian Informasi */}
           <div className="flex flex-col items-center md:items-start md:w-1/2 space-y-6">
-            <Card className="w-full max-w-md p-6 text-center">
-              <CardHeader>
-              <MapPin className="mx-auto" />
-                <CardTitle className="text-xl font-semibold">Alamat</CardTitle>
-                <CardDescription className="text-gray-600">
-                  Jl. Kh Wahid Hasyim 2 Samping Perum TVRI Graha Asri
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <Link href={"https://maps.app.goo.gl/Z2vgHjiBBgc7Pxus9"}>
+              <Card className="w-full max-w-md p-6 text-center transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-100">
+                <CardHeader>
+                  <MapPin className="mx-auto" />
+                  <CardTitle className="text-xl font-semibold">
+                    Alamat
+                  </CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Jl. Kh Wahid Hasyim 2 Samping Perum TVRI Graha Asri
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-md">
-              <Card className="p-4 flex flex-col items-center text-center">
-                <CardHeader>
-                    <Mail className="mx-auto"/>
-                  <CardTitle className="text-lg font-medium">Email</CardTitle>
-                  <CardDescription>info@example.com</CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="p-4 flex flex-col items-center text-center">
-                <CardHeader>
+              <Link href={"mailto:udhaderahsempaja@gmail.com"}>
+                <Card className="p-4 flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-100">
+                  <CardHeader>
+                    <Mail className="mx-auto" />
+                    <CardTitle className="text-lg font-medium">Email</CardTitle>
+                    <CardDescription>
+                      udhaderahsempaja@gmail.com
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
+              <Link href={"https://wa.me/628115631990"}>
+                <Card className="p-4 flex flex-col items-center text-center transition-transform transform hover:scale-105 hover:shadow-lg hover:bg-gray-100">
+                  <CardHeader>
                     <Phone className="mx-auto" />
-                  <CardTitle className="text-lg font-medium">Kontak</CardTitle>
-                  <CardDescription>+62 823 5000 0000</CardDescription>
-                </CardHeader>
-              </Card>
+                    <CardTitle className="text-lg font-medium">
+                      Kontak
+                    </CardTitle>
+                    <CardDescription>+62 811-5631-990</CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
             </div>
           </div>
 
@@ -185,7 +286,6 @@ export default function Home() {
             ></iframe>
           </div>
         </section>
-
       </main>
     </div>
   );

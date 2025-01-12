@@ -40,22 +40,22 @@ const ActionCell = ({ row, onRefresh }) => {
       });
       if (response.ok) {
         showAlert({
-          title: "Success",
-          text: "Data has been deleted.",
+          title: "Sukses",
+          text: "Pengiriman berhasil dihapus.",
           icon: "success",
         });
         onRefresh();
       } else {
         showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
+          title: "Gagal menghapus data",
+          text: "Terjadi kesalahan saat menghapus data. Silahkan coba lagi.",
           icon: "error",
         });
       }
     } catch (error) {
       showAlert({
-        title: "Error",
-        text: "An unexpected error occurred",
+        title: "Gagal menghapus data",
+        text: "Terjadi kesalahan saat menghapus data. Silahkan coba lagi.",
         icon: "error",
       });
       console.error("Error deleting data:", error);

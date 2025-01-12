@@ -23,7 +23,6 @@ export default function KendaraanForm({ initialData, mode }) {
   const [formData, setFormData] = React.useState({
     plat_nomor: initialData?.data?.plat_nomor || "",
     jenis_kendaraan: initialData?.data?.jenis_kendaraan || "",
-    kapasitas: initialData?.data?.kapasitas || "",
     status_kendaraan: initialData?.data?.status_kendaraan || "Tersedia",
   });
   const { showPostRedirectAlert, showAlert } = useSwal();
@@ -33,10 +32,6 @@ export default function KendaraanForm({ initialData, mode }) {
   const schema = z.object({
     plat_nomor: z.string().nonempty("Plat nomor harus diisi."),
     jenis_kendaraan: z.string().nonempty("Jenis kendaraan harus diisi."),
-    kapasitas: z
-      .number()
-      .min(1, "Kapasitas harus lebih dari 0.")
-      .or(z.string().regex(/^\d+$/, "Kapasitas harus berupa angka")),
     status_kendaraan: z.string().nonempty("Status kendaraan harus diisi."),
   });
 
@@ -87,7 +82,7 @@ export default function KendaraanForm({ initialData, mode }) {
       
       if (response.ok) {
         showPostRedirectAlert({
-          title: "Success",
+          title: "Sukses",
           text:
             mode === "edit"
               ? "Kendaraan berhasil diupdate."
@@ -97,13 +92,12 @@ export default function KendaraanForm({ initialData, mode }) {
         router.push("/dashboard/kendaraan");
       } else {
         showAlert({
-          title: "Error",
-          text: "An unexpected error occurred",
+          title: "Gagal menyimpan data",
+          text: "Pastikan plat nomor kendaraan belum terdaftar.",
           icon: "error",
         });
       }
     } catch (err) {
-      console.error("Unexpected Error:", err);
       setError({ general: "Terjadi kesalahan tak terduga." });
     } finally {
       setIsLoading(false);
@@ -148,25 +142,6 @@ export default function KendaraanForm({ initialData, mode }) {
               <p className="text-red-500">
                 {error.fieldErrors.jenis_kendaraan[0]}
               </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="kapasitas">Kapasitas (kg)</Label>
-            <Input
-              id="kapasitas"
-              type="number"
-              value={formData.kapasitas}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  kapasitas: parseInt(e.target.value),
-                })
-              }
-              placeholder="Masukkan kapasitas"
-            />
-            {error?.fieldErrors?.kapasitas && (
-              <p className="text-red-500">{error.fieldErrors.kapasitas[0]}</p>
             )}
           </div>
 

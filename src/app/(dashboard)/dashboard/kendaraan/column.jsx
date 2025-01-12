@@ -1,8 +1,6 @@
 "use client";
 import { MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,14 +20,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
+import { useSwal } from "@/hooks/use-swal";
 import { Badge } from "@/components/ui/badge";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 const ActionCell = ({ row, onRefresh }) => {
-  const { toast } = useToast();
+  const { showAlert } = useSwal(); // Use showAlert instead of showToast
   const data = row.original;
 
   const handleDelete = async (id) => {
@@ -40,10 +36,11 @@ const ActionCell = ({ row, onRefresh }) => {
       });
 
       if (response.ok) {
-        toast({
+        // Show success alert
+        showAlert({
           title: "Sukses",
-          description: "Kendaraan Berhasil Dihapus",
-          variant: "success",
+          text: "Kendaraan Berhasil Dihapus",
+          icon: "success",
         });
         onRefresh();
       } else {
@@ -53,28 +50,24 @@ const ActionCell = ({ row, onRefresh }) => {
           response.status === 500 ||
           (errorData && errorData.message?.toLowerCase().includes("relasi"))
         ) {
-          toast({
+          showAlert({
             title: "Gagal Menghapus",
-            description:
-              "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
-            variant: "destructive",
+            text: "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            icon: "error",
           });
         } else {
-          toast({
+          showAlert({
             title: "Gagal Menghapus data",
-            description:
-              errorData?.message ||
-              "Terjadi kesalahan saat menghapus data | Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
-            variant: "destructive",
+            text: errorData?.message || "Terjadi kesalahan saat menghapus data | Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            icon: "error",
           });
         }
       }
     } catch (error) {
-      toast({
+      showAlert({
         title: "Gagal menghapus data",
-        description:
-          "Terjadi kesalahan saat menghapus data (Data tidak dapat dihapus karena masih memiliki relasi dengan data lain)",
-        variant: "destructive",
+        text: "Terjadi kesalahan saat menghapus data (Data tidak dapat dihapus karena masih memiliki relasi dengan data lain)",
+        icon: "error",
       });
     }
   };
@@ -136,14 +129,6 @@ export const columns = [
   {
     accessorKey: "jenis_kendaraan",
     header: "Merk",
-  },
-  {
-    accessorKey: "kapasitas",
-    header: "Kapasitas",
-    cell: ({ row }) => {
-      const kapasitas = row.getValue("kapasitas");
-      return `${kapasitas.toLocaleString("id-ID")} Kg`;
-    },
   },
   {
     accessorKey: "status_kendaraan",

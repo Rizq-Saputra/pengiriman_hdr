@@ -206,8 +206,8 @@ export default function ShippingForm({ initialData, mode }) {
           // Execute all item requests
           await Promise.all(itemRequests);
           showPostRedirectAlert({
-            title: "Success!",
-            text: "Pengiriman berhasil diupdate",
+            title: "Sukses",
+            text: "Pengiriman berhasil diperbarui",
             icon: "success",
             confirmButtonText: "OK",
           });
@@ -266,7 +266,7 @@ export default function ShippingForm({ initialData, mode }) {
         }
 
         showPostRedirectAlert({
-          title: "Success!",
+          title: "Sukses",
           text: "Pengiriman berhasil ditambahkan",
           icon: "success",
           confirmButtonText: "OK",

@@ -24,13 +24,13 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
+import { useSwal } from "@/hooks/use-swal";
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 export default function DriverCard({ driver, onDelete }) {
-  const { toast } = useToast();
+  const { showAlert } = useSwal();
 
   const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
   const imageUrl = driver.gambar_supir
@@ -44,24 +44,27 @@ export default function DriverCard({ driver, onDelete }) {
       });
 
       if (response.ok) {
-        toast({
+        showAlert({
           title: "Sukses",
-          description: "Supir Berhasil Dihapus",
-          variant: "success",
+          text: "Supir Berhasil Dihapus",
+          icon: "success",
+          confirmButtonText: "OK",
         });
         onDelete();
       } else {
-        toast({
-          title: "Error",
-          description: response.body.message || "Failed to delete driver",
-          variant: "destructive",
+        showAlert({
+          title: "Gagal Menghapus",
+            text: "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+            icon: "error",
+            confirmButtonText: "OK",
         });
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
+      showAlert({
+        title: "Gagal Menghapus data",
+        text: "Gagal menghapus data karena masih memiliki relasi dengan data lain ",
+        icon: "error",
+        confirmButtonText: "OK",
       });
     }
   };

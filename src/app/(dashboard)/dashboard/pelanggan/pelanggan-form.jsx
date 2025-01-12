@@ -77,7 +77,7 @@ export default function PelangganForm({ initialData, mode }) {
               : errors
           );
         } else {
-          throw new Error("Terjadi kesalahan saat mengirim data.");
+          throw new Error("Pastikan Nomor Telepon dan Email tidak sama");
         }
         return;
       }
