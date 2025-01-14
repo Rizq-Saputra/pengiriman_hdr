@@ -7,7 +7,7 @@ export default async function DetailPengirimanPage({ params }) {
     const id = paramsUrl.slug[0];
     const secondParam = paramsUrl.slug[1];
 
-    if (secondParam && secondParam !== 'driver') {
+    if (secondParam && secondParam !== 'sopir') {
         notFound();
     }
 

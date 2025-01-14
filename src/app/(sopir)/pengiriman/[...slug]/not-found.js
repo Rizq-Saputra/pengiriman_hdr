@@ -9,7 +9,7 @@ export default function NotFound() {
             <h1 className="text-2xl font-bold">Pengiriman tidak ditemukan</h1>
             <p>Pengiriman dengan ID tersebut tidak ditemukan.</p>
             <Button variant="outline" asChild>
-                <Link href="/driver">Kembali ke halaman utama</Link>
+                <Link href="/sopir">Kembali ke halaman utama</Link>
             </Button>
           </CardContent>
         </Card>

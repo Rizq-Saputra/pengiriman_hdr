@@ -110,7 +110,7 @@ export default function PengirimanSupir() {
                             {/* 2 button */}
                             <div className="flex gap-x-2">
                                 <Button variant="default" asChild>
-                                    <Link href={`/pengiriman/${item.pengiriman_id}/driver`}>
+                                    <Link href={`/pengiriman/${item.pengiriman_id}/sopir`}>
                                         Detail
                                     </Link>
                                 </Button>

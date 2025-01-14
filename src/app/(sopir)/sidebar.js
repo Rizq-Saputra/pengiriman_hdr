@@ -63,7 +63,7 @@ const getSupirData = async () => {
 const items = [
   {
     title: "Beranda",
-    url: "/driver",
+    url: "/sopir",
     icon: Home,
     exact: true,
   },
@@ -75,7 +75,7 @@ function handleLogout() {
   redirect("/login");
 }
 
-export function DriverSidebar() {
+export function SopirSidebar() {
   const pathname = usePathname();
 
   const [data, setData] = useState([]);

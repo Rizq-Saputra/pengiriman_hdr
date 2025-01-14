@@ -1,10 +1,10 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { DriverSidebar } from "./sidebar";
+import { SopirSidebar } from "./sidebar";
 
-export default function DriverLayout({ children }) {
+export default function SopirLayout({ children }) {
   return (
     <SidebarProvider>
-      <DriverSidebar />
+      <SopirSidebar />
         <SidebarInset>
           <SidebarTrigger />
           {children}

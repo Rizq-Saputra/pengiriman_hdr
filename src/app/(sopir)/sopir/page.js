@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import PengirimanSupir from "./PengirimanSupir";
 
 
-export default async function Driver() {
+export default async function Sopir() {
     return (
         <div className="p-8 w-full">
             <Card>

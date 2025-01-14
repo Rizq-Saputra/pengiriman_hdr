@@ -47,7 +47,7 @@ export default function ChooseLogin() {
             </CardHeader>
           </Card>
         </Link>
-        <Link href={"/login/driver"}>
+        <Link href={"/login/sopir"}>
           <Card className="p-8 text-center hover:bg-muted transition-colors cursor-pointer flex flex-col items-center">
             <CardHeader>
               <CardDescription>
@@ -67,7 +67,7 @@ export default function ChooseLogin() {
                   />
                 </svg>
               </CardDescription>
-              <CardTitle className="text-center text-2xl">Driver</CardTitle>
+              <CardTitle className="text-center text-2xl">Sopir</CardTitle>
             </CardHeader>
           </Card>
         </Link>
