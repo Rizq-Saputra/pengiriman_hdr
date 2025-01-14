@@ -166,7 +166,7 @@ export default function Home() {
                 </CardHeader>
               </Card>
             </Link>
-            <Link href={"/login/driver"}>
+            <Link href={"/login/sopir"}>
               <Card className="p-8 text-center  hover:bg-[#24277a] hover:text-white group transition-colors cursor-pointer flex flex-col items-center">
                 <CardHeader>
                   <CardDescription>
