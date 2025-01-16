@@ -101,7 +101,7 @@ export default function BarangForm({ initialData, mode }) {
           harga: 0,
         });
         showPostRedirectAlert({
-          title: "Success!",
+          title: "Sukses",
           text: "Barang berhasil ditambahkan.",
           icon: "success",
         });

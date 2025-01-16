@@ -90,7 +90,7 @@ export default function Login() {
       <VeryTopBackButton />
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl mx-auto">Masuk</CardTitle>
+          <CardTitle className="text-2xl mx-auto">Admin</CardTitle>
           <CardDescription>
             Masukan nama dan sandi untuk masuk ke halaman.
           </CardDescription>

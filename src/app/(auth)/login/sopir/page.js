@@ -92,7 +92,7 @@ export default function LoginSopir() {
       <VeryTopBackButton />
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Sopir</CardTitle>
+          <CardTitle className="text-2xl text-center">Sopir</CardTitle>
           <CardDescription>
             Masukan nomor telepon dan sandi untuk masuk.
           </CardDescription>

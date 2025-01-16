@@ -4,7 +4,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -22,6 +21,13 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
   const tableData = React.useMemo(
@@ -46,7 +52,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
   });
 
   const [globalFilter, setGlobalFilter] = useState("");
-
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const pagination = React.useMemo(
     () => ({
       pageIndex,
@@ -56,8 +62,12 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
   );
 
   useEffect(() => {
-    onRefresh({ pageIndex, pageSize });
-  }, [pageIndex, pageSize, onRefresh]);
+    onRefresh({ 
+      pageIndex, 
+      pageSize,
+      kategori: categoryFilter === "all" ? "" : categoryFilter 
+    });
+  }, [pageIndex, pageSize, categoryFilter, onRefresh]);
 
   const table = useReactTable({
     data: tableData,
@@ -71,28 +81,48 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
-    manualPagination: true, // Enable manual pagination
+    manualPagination: true,
     onRefresh,
   });
 
+  const handleCategoryChange = (value) => {
+    setCategoryFilter(value);
+    setPagination({ pageIndex: 0, pageSize });
+  };
+
   return (
     <div>
-      <div className="flex items-center py-4">
-        <div className="relative w-64">
-          <Input
-            placeholder="Cari data..."
-            onChange={(e) => setGlobalFilter(String(e.target.value))}
-            className="pl-10"
-          />
-          <Search
-            className="absolute top-1/2 left-2 transform -translate-y-1/2"
-            size={18}
-          />
+      <div className="flex items-center justify-between py-4">
+        <div className="flex gap-4 items-center">
+          <div className="relative w-64">
+            <Input
+              placeholder="Cari data..."
+              onChange={(e) => setGlobalFilter(String(e.target.value))}
+              className="pl-10"
+            />
+            <Search
+              className="absolute top-1/2 left-2 transform -translate-y-1/2"
+              size={18}
+            />
+          </div>
+
+          <Select onValueChange={handleCategoryChange} value={categoryFilter}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter Kategori" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua Kategori</SelectItem>
+              <SelectItem value="Ulin">Ulin</SelectItem>
+              <SelectItem value="Meranti">Meranti</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <Link href="/dashboard/barang/tambah" className="ml-auto">
+
+        <Link href="/dashboard/barang/tambah">
           <Button variant="default">Tambah Barang</Button>
         </Link>
       </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

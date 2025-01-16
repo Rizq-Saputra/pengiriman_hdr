@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { WhatsAppButton } from "./whatsapp";
 
 export default function Home() {
   const produkData = [
@@ -74,7 +75,8 @@ export default function Home() {
           <div className="flex-1 md:text-left order-2 md:order-1">
             {" "}
             <h1 className="md:text-5xl text-3xl font-bold mb-6">
-              UD Haderah Samarinda
+              <span className="text-primary">UD</span>{" "}
+              <span className="text-destructive">Haderah Samarinda</span>
             </h1>
             <p className="text-lg text-gray-700 mb-6 max-w-lg">
               Menjual berbagai macam bahan bangunan kayu serta melayani jasa
@@ -299,6 +301,9 @@ export default function Home() {
           </div>
         </section>
       </main>
+      <Link href="https://wa.me/628115631990" target="_blank">
+        <WhatsAppButton />
+      </Link>
     </div>
   );
 }
