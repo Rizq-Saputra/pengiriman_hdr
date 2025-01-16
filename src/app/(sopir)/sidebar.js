@@ -1,7 +1,7 @@
 "use client";
 
 import { CarFront, Home, LogOut, PackagePlus, Truck, User } from "lucide-react";
-
+import Image from "next/image";
 import {
   Sidebar,
   SidebarContent,
@@ -20,7 +20,7 @@ import { jwtDecode } from "jwt-decode";
 
 // get supir data from jwt token
 
-const getSupirData = async () => {
+export const getSupirData = async () => {
   const token = localStorage.getItem("token");
   if (!token || token == "undefined" || token == "null") {
     redirect("/login");
@@ -28,13 +28,16 @@ const getSupirData = async () => {
   const decoded = jwtDecode(token);
   const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/supir/${decoded.supirId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/supir/${decoded.supirId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   // if res is 401, try to use refresh token
   if (res.status === 401) {
     const refreshTokenLocal = localStorage.getItem("refreshToken");
@@ -52,12 +55,9 @@ const getSupirData = async () => {
   }
   const data = await res.json();
 
-
-
   //   return res.json();
   return data.data;
-}
-
+};
 
 // Menu items.
 const items = [
@@ -91,13 +91,23 @@ export function SopirSidebar() {
     };
 
     getData();
-  }
-    , []);
+  }, []);
 
   return (
     <Sidebar>
       <SidebarContent className="flex flex-col h-full">
         {/* Main menu items */}
+        <div className="flex items-center space-x-3 cursor-pointer mt-4 p-4">
+          <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+            <Image
+              width={32}
+              height={32}
+              src="/logo.png"
+              alt="Logo UD Haderah"
+            />
+          </div>
+          <span className="text-xl font-bold">UD Haderah</span>
+        </div>
         <div className="flex-1">
           <SidebarGroup>
             <SidebarGroupLabel>
@@ -107,7 +117,10 @@ export function SopirSidebar() {
               <SidebarMenu>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isUrlMatch(pathname, item.url, item.exact)}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isUrlMatch(pathname, item.url, item.exact)}
+                    >
                       <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
@@ -125,7 +138,7 @@ export function SopirSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild onClick={handleLogout}>
-                <button>
+                <button className="text-destructive font-bold p-4 mb-2 hover:text-destructive">
                   <LogOut />
                   <span>Logout</span>
                 </button>

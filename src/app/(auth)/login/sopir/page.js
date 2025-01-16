@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+import { useSwal } from "@/hooks/use-swal";
 import { z } from "zod";
 
 // Define Zod schema for validation
@@ -29,12 +29,12 @@ const loginSchema = z.object({
 
 export default function LoginSopir() {
   const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+  const { showPostRedirectAlert, showAlert } = useSwal();
   const [nope, setNope] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -61,10 +61,11 @@ export default function LoginSopir() {
       const { token, refreshToken } = await res.json();
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", refreshToken);
-      toast({
-        title: "Success",
-        description: "Logged in successfully",
-        variant: "success",
+      // Tampilkan notifikasi sukses
+      showPostRedirectAlert({
+        title: "Sukses",
+        text: "Berhasil Masuk",
+        icon: "success",
       });
       router.push("/sopir");
     } catch (err) {
@@ -76,11 +77,12 @@ export default function LoginSopir() {
         }, {});
         setErrors(fieldErrors);
       } else {
-        toast({
-          title: "Error",
-          description: err.message || "Something went wrong",
-          variant: "destructive",
-        });
+        // Show error using SweetAlert
+      showAlert({
+        icon: "error",
+        title: "Gagal Masuk",
+        text: err.message,
+      });
       }
     } finally {
       setLoading(false);

@@ -31,9 +31,9 @@ export default function SupirPage() {
         <div className="p-8 w-full">
             <Card>
                 <div className="flex justify-between items-center p-4">
-                    <CardTitle className="text-2xl">Supir</CardTitle>
+                    <CardTitle className="text-2xl">Sopir</CardTitle>
                     <Link href="/dashboard/supir/tambah" className="ml-auto">
-                        <Button>Tambah Supir</Button>
+                        <Button>Tambah Sopir</Button>
                     </Link>
                 </div>
             </Card>

@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 import {
   DropdownMenu,
@@ -73,14 +73,6 @@ export default function DriverCard({ driver, onDelete }) {
     <Card key={driver.id} className="hover:bg-muted transition-colors">
       <CardHeader className="p-0">
         <div className="w-full h-56 overflow-hidden">
-          {/* <Image error in next 15.1.0
-                    src={`http://localhost:5000/uploads/1734152745431-175168925-chrome_hf4FrJ4iEW.png`}
-                    alt={`${driver.nama_supir} photo`}
-                    className="w-full h-full object-cover"
-                    width={500}    // Increased size for better quality
-                    height={500}   // Increased size for better quality
-                    priority      // Optional: loads image immediately
-                /> */}
           <img
             src={`${imageUrl}`}
             alt={`${driver.nama_supir} photo`}
@@ -91,7 +83,8 @@ export default function DriverCard({ driver, onDelete }) {
       <CardContent className="pt-4">
         <div className="flex justify-between items-start">
           <div className="flex flex-col text-left">
-            <CardTitle className="text-xl">{driver.nama_supir}</CardTitle>
+            <CardTitle className="text-xl">{driver.nama_supir} </CardTitle>
+            <CardDescription>Antaran = {driver.jumlah_antaran}</CardDescription>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

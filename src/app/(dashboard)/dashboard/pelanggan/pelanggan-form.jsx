@@ -84,7 +84,7 @@ export default function PelangganForm({ initialData, mode }) {
 
       // Tampilkan notifikasi sukses
       showPostRedirectAlert({
-        title: "Success",
+        title: "Sukses",
         text:
           mode === "edit"
             ? "Pelanggan berhasil diperbarui"

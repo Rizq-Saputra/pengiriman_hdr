@@ -73,7 +73,7 @@ export default function SupirForm({ initialData, mode }) {
         } else {
           showPostRedirectAlert({
             title: "Sukses",
-            text: "Supir berhasil diperbarui",
+            text: "Sopir berhasil diperbarui",
             icon: "success",
           });
           router.push("/dashboard/supir");
@@ -89,7 +89,7 @@ export default function SupirForm({ initialData, mode }) {
         } else {
           showPostRedirectAlert({
             title: "Sukses",
-            text: "Supir berhasil ditambahkan",
+            text: "Sopir berhasil ditambahkan",
             icon: "success",
           });
           router.push("/dashboard/supir");
@@ -121,7 +121,7 @@ export default function SupirForm({ initialData, mode }) {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle>{mode === "edit" ? "Edit Supir" : "Tambah Supir"}</CardTitle>
+        <CardTitle>{mode === "edit" ? "Edit Sopir" : "Tambah Sopir"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -133,7 +133,7 @@ export default function SupirForm({ initialData, mode }) {
               onChange={(e) =>
                 setFormData({ ...formData, nama_supir: e.target.value })
               }
-              placeholder="Masukkan nama supir"
+              placeholder="Masukkan nama sopir"
             />
             {errorData.nama_supir && (
               <p className="text-red-500 text-sm">{errorData.nama_supir}</p>
@@ -209,7 +209,7 @@ export default function SupirForm({ initialData, mode }) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Sandi</Label>
             <Input
               id="password"
               type="password"
@@ -217,14 +217,14 @@ export default function SupirForm({ initialData, mode }) {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              placeholder="Masukkan password"
+              placeholder="Masukkan sandi"
             />
             {errorData.password && (
               <p className="text-red-500 text-sm">{errorData.password}</p>
             )}
             {mode === "edit" && (
               <p className="text-sm text-gray-500">
-                Kosongkan jika tidak ingin mengubah password
+                Kosongkan jika tidak ingin mengubah sandi
               </p>
             )}
           </div>
@@ -272,7 +272,7 @@ export default function SupirForm({ initialData, mode }) {
               ? "menyimpan..."
               : mode === "edit"
               ? "Simpan Perubahan"
-              : "Tambah Supir"}
+              : "Tambah Sopir"}
           </Button>
         </form>
       </CardContent>

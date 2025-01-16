@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { DataTable } from "./data-table";
 import { columns } from "./column";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function TableClient({ promise }) {
   const [data, setData] = useState([]);
@@ -25,11 +26,18 @@ export default function TableClient({ promise }) {
   }, [fetchData]);
 
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-      loading={loading}
-      onRefresh={fetchData}
-    />
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">Pelanggan</CardTitle>
+        </CardHeader>
+      </Card>
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={loading}
+        onRefresh={fetchData}
+      />
+    </>
   );
 }
