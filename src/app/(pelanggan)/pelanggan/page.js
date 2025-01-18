@@ -6,11 +6,10 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useState } from "react";
 import Loading from "./loading";
-import { Link as IconLink, PhoneCall } from "lucide-react";
+import { Link as IconLink, PhoneCall, Search } from "lucide-react";
 import Link from "next/link";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-
 
 async function searchByResi(resi) {
   const response = await fetch(`${BASE_URL}/api/pengiriman-pelanggan`, {
@@ -75,14 +74,37 @@ export default function PelangganPage() {
         <CardTitle className="text-lg">Detail Pengiriman</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <CardTitle className="text-lg font-inter">
+          <p className="text-sm text-muted-foreground">Tanggal</p>
+          <p className="font-medium">
+            {new Date(delivery?.tanggal_pengiriman).toLocaleDateString(
+              "id-ID",
+              {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+            )}
+          </p>
+        </CardTitle>
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Supir</p>
-            <p className="font-medium">{delivery?.Supir.nama_supir}</p>
-            <Link href={`https://wa.me/${delivery?.Supir.no_telepon.replace("08", "628")}`} target="_blank">
-              <Button variant="outline" className="text-sm">
+            <p className="font-medium">
+              {delivery?.Supir.nama_supir} - {delivery?.Supir.no_telepon}{" "}
+            </p>
+            <Link
+              href={`https://wa.me/${delivery?.Supir.no_telepon.replace(
+                "08",
+                "628"
+              )}`}
+              target="_blank"
+            >
+              <Button variant="success" className="text-sm">
                 <PhoneCall size={16} className="mr-2" />
-                {delivery?.Supir.no_telepon}
+                WhatsApp Supir
               </Button>
             </Link>
           </div>
@@ -91,15 +113,8 @@ export default function PelangganPage() {
             <p className="font-medium">{delivery?.Kendaraan.plat_nomor}</p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Tanggal</p>
-            <p className="font-medium">{
-              new Date(delivery?.tanggal_pengiriman).toLocaleDateString("id-ID", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            }</p>
+            <p className="text-sm text-muted-foreground">Alamat</p>
+            <p className="font-medium">{delivery?.alamat_tujuan}</p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Penerima</p>
@@ -107,7 +122,9 @@ export default function PelangganPage() {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Deskripsi</p>
-            <p className="font-medium border rounded py-2 px-3">{delivery?.deskripsi}</p>
+            <p className="font-medium border rounded py-2 px-3">
+              {delivery?.deskripsi}
+            </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Status</p>
@@ -116,10 +133,58 @@ export default function PelangganPage() {
             </Badge>
           </div>
         </div>
+        <div>
+          <p className="text-sm text-muted-foreground mb-4">Barang</p>
+          <table className="table-auto w-full border-collapse border border-gray-200 text-left">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-200 px-4 py-2">
+                  Nama Barang
+                </th>
+                <th className="border border-gray-200 px-4 py-2">Kategori</th>
+                <th className="border border-gray-200 px-4 py-2">Jumlah</th>
+                <th className="border border-gray-200 px-4 py-2">Harga</th>
+                <th className="border border-gray-200 px-4 py-2">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {delivery?.DetailPengiriman.map((barang) => (
+                <tr key={barang.barang_id}>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {barang.Barang.nama_barang}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {barang.Barang.kategori}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {barang.jumlah_barang}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                    }).format(barang.Barang.harga)}
+                  </td>
+                  <td className="border border-gray-200 px-4 py-2">
+                    {Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                    }).format(barang.jumlah_barang * barang.Barang.harga)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {delivery?.bukti_pengiriman && (
           <div className="relative w-full aspect-video">
             <img
-              src={process.env.NEXT_PUBLIC_BACKEND_API_URL + delivery?.bukti_pengiriman}
+              src={
+                process.env.NEXT_PUBLIC_BACKEND_API_URL +
+                delivery?.bukti_pengiriman
+              }
               alt="Bukti Pengiriman"
               className="object-cover rounded-md"
             />
@@ -133,27 +198,15 @@ export default function PelangganPage() {
             /> */}
           </div>
         )}
-        <div>
-          <p className="text-sm text-muted-foreground">Alamat</p>
-          <p className="font-medium">{delivery?.alamat_tujuan}</p>
-        </div>
-        <div>
-          <p className="text-sm text-muted-foreground">Barang</p>
-          <ul className="list-disc list-inside">
-            {delivery?.DetailPengiriman.map((barang) => (
-              <li key={barang.barang_id}>{barang.Barang.nama_barang} - {barang.Barang.kategori}</li>
-            ))}
-          </ul>
-        </div>
       </CardContent>
     </Card>
   );
 
   return (
-    <div className="p-8 w-full max-w-3xl mx-auto space-y-4">
+    <div className="p-8 w-full justify-between max-w-3xl mx-auto space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>Tracking Pengiriman</CardTitle>
+          <CardTitle>Cari Pengiriman</CardTitle>
         </CardHeader>
       </Card>
 
@@ -168,7 +221,8 @@ export default function PelangganPage() {
                 onChange={(e) => setResi(e.target.value)}
                 className="flex-1"
               />
-              <Button type="submit" disabled={loading || !resi}>
+              <Button type="submit" className="m-auto" disabled={loading || !resi}>
+              <Search size={16}/>
                 {loading ? "Mencari..." : "Cari"}
               </Button>
             </div>
@@ -181,11 +235,7 @@ export default function PelangganPage() {
       {loading ? (
         <Loading />
       ) : (
-        <>
-          {delivery &&
-            <DeliveryDetail delivery={delivery} />
-          }
-        </>
+        <>{delivery && <DeliveryDetail delivery={delivery} />}</>
       )}
     </div>
   );

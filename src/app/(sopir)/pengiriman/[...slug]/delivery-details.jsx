@@ -27,17 +27,16 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import * as React from "react";
-// Import React FilePond
-import { FilePond, registerPlugin } from "react-filepond";
-
+import { PhoneCall } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 // Import FilePond styles
+import { FilePond, registerPlugin } from "react-filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond/dist/filepond.min.css";
 // Import the plugin styles
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { STATUS_PENGIRIMAN } from "@/constants/status";
-import Image from "next/image";
 import Link from "next/link";
 import { useSwal } from "@/hooks/use-swal";
 
@@ -246,48 +245,88 @@ export default function DeliveryDetails({ id }) {
       </Card>
       <Card className="mt-4 p-4">
         <CardHeader>
-          <CardTitle>{data.alamat_tujuan}</CardTitle>
-        </CardHeader>
-        <CardHeader>
-          <p>
-            {data.Pelanggan.nama_pelanggan} - {data.Pelanggan.no_telepon}
-          </p>
-        </CardHeader>
-        <CardContent>
-          <Textarea value={data.deskripsi} disabled />
-          <p className="text-sm text-gray-500 mt-2">
+          <h1 className="text-sm font-bold my-2">
             {Intl.DateTimeFormat("id-ID", {
               dateStyle: "full",
             }).format(new Date(data.tanggal_pengiriman))}
+          </h1>
+          <p className="mb-4 font-bold">
+            Pelanggan : {data.Pelanggan.nama_pelanggan}
           </p>
-          <div className="flex justify-between border-b-2 border-gray-200 pb-2">
-            <p>Jenis Pembayaran</p>
-            <p>{data.pembayaran}</p>
-          </div>
+        </CardHeader>
+        <CardContent className="flex space-x-2 items-center">
+          <Link
+            href={`https://wa.me/${data.Pelanggan.no_telepon.replace(
+              "08",
+              "628"
+            )}`}
+            target="_blank"
+          >
+            <Button variant="outline" className="text-sm">
+              <PhoneCall size={16} className="mr-2" />
+              {data.Pelanggan.no_telepon}
+            </Button>
+          </Link>
+          <Badge className="p-2">{data.pembayaran}</Badge>
+        </CardContent>
+        <CardContent>
+          <p>Alamat</p>
+          <Textarea className="mb-4" value={data.alamat_tujuan} />
+          <p>Deskripsi</p>
+          <Textarea value={data.deskripsi} />
         </CardContent>
         <div className="p-8">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Barang</TableHead>
-                <TableHead>Kategori</TableHead>
-                <TableHead>Berat</TableHead>
-                <TableHead>Jumlah</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.DetailPengiriman.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-semibold">
-                    {item.Barang.nama_barang}
-                  </TableCell>
-                  <TableCell>{item.Barang.kategori}</TableCell>
-                  <TableCell>{item.Barang.berat} kg</TableCell>
-                  <TableCell className="">{item.jumlah_barang}</TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Barang</TableHead>
+                  <TableHead>Kategori</TableHead>
+                  <TableHead>Jumlah</TableHead>
+                  <TableHead>Harga</TableHead>
+                  <TableHead>Subtotal</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data.DetailPengiriman.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-semibold text-nowrap">
+                      {item.Barang.nama_barang}
+                    </TableCell>
+                    <TableCell>{item.Barang.kategori}</TableCell>
+                    <TableCell className="">{item.jumlah_barang}</TableCell>
+                    <TableCell>
+                      {Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(item.Barang.harga)}
+                    </TableCell>
+                    <TableCell>
+                      {Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }).format(item.jumlah_barang * item.Barang.harga)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex justify-between items-center border-t-2 border-gray-200 pt-4 px-4 mt-4">
+            <p className="text-lg font-medium">Total</p>
+            <p className="text-lg font-bold">
+              {Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).format(data.total)}
+            </p>
+          </div>
         </div>
         {/* add bukti pengiriman if exist */}
         {data.bukti_pengiriman && (
@@ -433,7 +472,7 @@ export default function DeliveryDetails({ id }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <Button variant="outline" asChild>
+            <Button variant="success" asChild>
               <Link
                 href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
                   /\D/g,
@@ -442,6 +481,8 @@ export default function DeliveryDetails({ id }) {
                   data.Pelanggan.nama_pelanggan
                 },%20kami%20dari%20Kurir%20Express`}
               >
+              <PhoneCall size={16}/>
+
                 Hubungi Pelanggan
               </Link>
             </Button>

@@ -172,7 +172,9 @@ export const columns = [
               ? "bg-red-200 text-red-800"
               : statusData === STATUS_PENGIRIMAN.DALAM_PENGIRIMAN
               ? "bg-yellow-200 text-yellow-800"
-              : "bg-green-200 text-green-800"
+              : statusData === STATUS_PENGIRIMAN.SELESAI
+              ? "bg-green-200 text-green-800"
+              : "bg-gray-200 text-gray-800"
           }`}
         >
           {statusData}

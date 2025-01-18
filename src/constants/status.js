@@ -7,5 +7,7 @@ export const STATUS_PENGIRIMAN = {
 
 export const STATUS_PEMBAYARAN = {
   COD: "COD",
-  TRANSFER: "Transfer"
+  TRANSFER: "Transfer",
+  LUNAS: "Lunas",
+  BELUM_LUNAS: "Belum Lunas"
 };

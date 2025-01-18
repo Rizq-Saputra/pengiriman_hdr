@@ -3,35 +3,33 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, CheckCircle, Truck } from "lucide-react";
-import { fetchWithAuth } from '@/lib/fetchWithAuth';
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 const StatusCards = () => {
   const [statusCounts, setStatusCounts] = useState({
-    'Belum Dikirim': 0,
-    'Dalam Pengiriman': 0,
-    'Selesai': 0
+    "Belum Dikirim": 0,
+    Selesai: 0,
+    "Dalam Pengiriman": 0,
   });
 
   useEffect(() => {
     const fetchStatusCounts = async () => {
       try {
-        const response = await fetchWithAuth('/api/pengiriman/stats');
+        const response = await fetchWithAuth("/api/pengiriman/stats");
         const data = response.body.data;
-        
         const newCounts = {
-          'Belum Dikirim': 0,
-          'Dalam Pengiriman': 0,
-          'Selesai': 0
+          "Belum Dikirim": 0,
+          Selesai: 0,
+          "Dalam Pengiriman": 0,
         };
 
-        data.forEach(stat => {
+        data.forEach((stat) => {
           newCounts[stat.status_pengiriman] = stat._count.status_pengiriman;
         });
 
         setStatusCounts(newCounts);
-        
       } catch (error) {
-        console.error('Error fetching status counts:', error);
+        console.error("Error fetching status counts:", error);
       }
     };
 
@@ -46,20 +44,24 @@ const StatusCards = () => {
           <Clock className="w-4 h-4 text-orange-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{statusCounts['Belum Dikirim']}</div>
-          <p className="text-xs text-muted-foreground">
-            Menunggu pengiriman
-          </p>
+          <div className="text-2xl font-bold">
+            {statusCounts["Belum Dikirim"]}
+          </div>
+          <p className="text-xs text-muted-foreground">Menunggu pengiriman</p>
         </CardContent>
       </Card>
 
       <Card className="shadow-md">
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-          <CardTitle className="text-sm font-medium">Dalam Pengiriman</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Dalam Pengiriman
+          </CardTitle>
           <Truck className="w-4 h-4 text-blue-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{statusCounts['Dalam Pengiriman']}</div>
+          <div className="text-2xl font-bold">
+            {statusCounts["Dalam Pengiriman"]}
+          </div>
           <p className="text-xs text-muted-foreground">
             Sedang dalam perjalanan
           </p>
@@ -72,10 +74,8 @@ const StatusCards = () => {
           <CheckCircle className="w-4 h-4 text-green-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{statusCounts['Selesai']}</div>
-          <p className="text-xs text-muted-foreground">
-            Pengiriman selesai
-          </p>
+          <div className="text-2xl font-bold">{statusCounts["Selesai"]}</div>
+          <p className="text-xs text-muted-foreground">Pengiriman selesai</p>
         </CardContent>
       </Card>
     </div>
