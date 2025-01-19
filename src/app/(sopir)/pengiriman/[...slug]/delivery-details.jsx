@@ -330,8 +330,10 @@ export default function DeliveryDetails({ id }) {
         </div>
         {/* add bukti pengiriman if exist */}
         {data.bukti_pengiriman && (
-          <div className="p-8">
-            <p className="font-semibold">Bukti Pengiriman</p>
+          <div className="p-8 flex flex-col">
+            <CardTitle className="font-semibold mb-4 text-center">
+              Bukti Pengiriman
+            </CardTitle>
             <img
               src={
                 process.env.NEXT_PUBLIC_BACKEND_API_URL + data.bukti_pengiriman
@@ -481,8 +483,7 @@ export default function DeliveryDetails({ id }) {
                   data.Pelanggan.nama_pelanggan
                 },%20kami%20dari%20Kurir%20Express`}
               >
-              <PhoneCall size={16}/>
-
+                <PhoneCall size={16} />
                 Hubungi Pelanggan
               </Link>
             </Button>

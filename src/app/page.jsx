@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppButton } from "./whatsapp";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   const produkData = [
@@ -66,9 +67,6 @@ export default function Home() {
           </div>
           <span className="text-xl font-bold">UD Haderah</span>
         </div>
-        <Link href={"/pelanggan"}>
-          <Button>Lihat Pengiriman</Button>
-        </Link>
       </header>
       <main className="mt-10">
         <section className="flex flex-col md:flex-row items-center justify-between text-center px-6 w-full max-w-7xl">
@@ -83,9 +81,11 @@ export default function Home() {
               pengiriman barang dengan harga yang berkualitas dan pelayanan yang
               cepat
             </p>
-            <Button variant="default" className="px-6 py-6 font-medium">
-              Baca Selengkapnya
-            </Button>
+            <Link href={"/pelanggan"}>
+              <Button variant="default" className="px-6 py-6 mb-4 font-medium">
+                Lihat Pengiriman
+              </Button>
+            </Link>
           </div>
 
           <div className="flex-1 flex items-center justify-center mt-6 md:mt-0 order-1 md:order-2">
@@ -304,6 +304,7 @@ export default function Home() {
       <Link href="https://wa.me/628115631990" target="_blank">
         <WhatsAppButton />
       </Link>
+      <Footer />
     </div>
   );
 }

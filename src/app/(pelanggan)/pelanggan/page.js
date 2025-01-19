@@ -178,8 +178,24 @@ export default function PelangganPage() {
             </tbody>
           </table>
         </div>
+        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+          <p className="text-sm text-muted-foreground">Total Harga</p>
+          <p className="font-bold">
+            {Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+              minimumFractionDigits: 0,
+            }).format(
+              delivery?.DetailPengiriman.reduce(
+                (acc, barang) => acc + barang.jumlah_barang * barang.Barang.harga,
+                0
+              )
+            )}
+          </p>
+        </div>
         {delivery?.bukti_pengiriman && (
           <div className="relative w-full aspect-video">
+            <CardTitle className="mb-4 text-center">Bukti Pengiriman</CardTitle>
             <img
               src={
                 process.env.NEXT_PUBLIC_BACKEND_API_URL +

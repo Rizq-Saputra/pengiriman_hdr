@@ -106,14 +106,28 @@ const ActionCell = ({ row, onRefresh }) => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        {/* show bukti pengiriman if exist */}
-        {data.bukti_pengiriman && (
+        {/* {data.bukti_pengiriman && (
           <Link href={data.bukti_pengiriman} passHref>
             <DropdownMenuItem as="a" target="_blank">
               Bukti Pengiriman
             </DropdownMenuItem>
           </Link>
-        )}
+        )} */}
+        <Link
+          href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
+            /\D/g,
+            ""
+          )}&text=Halo%20${
+            data.Pelanggan.nama_pelanggan
+          },%20terima%20kasih%20telah%20berbelanja%20di%20UD%20Haderah%20Sempaja.%20Berikut%20kami%20informasikan%20nomor%20resi%20pengiriman%20Anda:%20${
+            data.resi
+          }.%20Silakan%20gunakan%20nomor%20resi%20ini%20untuk%20melacak%20pesanan%20Anda.%20Jika%20ada%20pertanyaan,%20jangan%20ragu%20untuk%20menghubungi%20kami.%20Terima%20kasih!`}
+          passHref
+        >
+          <DropdownMenuItem as="a" target="_blank">
+            Whatsapp Pelanggan
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );
