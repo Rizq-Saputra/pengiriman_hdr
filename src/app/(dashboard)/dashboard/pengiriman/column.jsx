@@ -1,6 +1,6 @@
 "use client";
 import { MoreHorizontal } from "lucide-react";
-
+import { Pencil, Trash2, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -72,15 +72,17 @@ const ActionCell = ({ row, onRefresh }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <Link href={`/dashboard/pengiriman/${data.pengiriman_id}/edit`}>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem className="text-yellow-600 cursor-pointer">
+            <Pencil /> Edit
+          </DropdownMenuItem>
         </Link>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem
-              className="text-red-600"
+              className="text-red-600 cursor-pointer"
               onSelect={(e) => e.preventDefault()}
             >
-              Hapus
+              <Trash2 /> Hapus
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -124,8 +126,8 @@ const ActionCell = ({ row, onRefresh }) => {
           }.%20Silakan%20gunakan%20nomor%20resi%20ini%20untuk%20melacak%20pesanan%20Anda.%20Jika%20ada%20pertanyaan,%20jangan%20ragu%20untuk%20menghubungi%20kami.%20Terima%20kasih!`}
           passHref
         >
-          <DropdownMenuItem as="a" target="_blank">
-            Whatsapp Pelanggan
+          <DropdownMenuItem as="a" className="text-green-600 cursor-pointer" target="_blank">
+          <Phone /> Whatsapp Pelanggan
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

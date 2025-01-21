@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { CirclePlus } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -79,7 +79,7 @@ export function DataTable({ columns, data, loading, onRefresh }) {
           />
         </div>
         <Link href="/dashboard/pelanggan/tambah" className="ml-auto">
-          <Button variant="default">Tambah Pelanggan</Button>
+          <Button variant="default"><CirclePlus></CirclePlus> Tambah Pelanggan</Button>
         </Link>
       </div>
       <div className="rounded-md border">

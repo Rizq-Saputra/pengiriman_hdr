@@ -6,7 +6,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { CirclePlus } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -119,7 +119,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
         </div>
 
         <Link href="/dashboard/barang/tambah">
-          <Button variant="default">Tambah Barang</Button>
+          <Button variant="default"><CirclePlus></CirclePlus> Tambah Barang</Button>
         </Link>
       </div>
 

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-
+import { Pencil, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,15 +97,15 @@ export default function DriverCard({ driver, onDelete }) {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href={`/dashboard/supir/${driver.supir_id}/edit`}>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem className="text-yellow-600 cursor-pointer"><Pencil/> Edit</DropdownMenuItem>
               </Link>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <DropdownMenuItem
-                    className="text-red-600"
+                    className="text-red-600 cursor-pointer"
                     onSelect={(e) => e.preventDefault()}
                   >
-                    Hapus
+                  <Trash2/>  Hapus
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
                 <AlertDialogContent>

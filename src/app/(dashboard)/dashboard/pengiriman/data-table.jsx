@@ -8,7 +8,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { CirclePlus,Download } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -142,10 +142,10 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
 
         <div className="space-x-2 flex items-center flex-col sm:flex-row">
           <Button variant="success" onClick={downloadExcel}>
-            Export Pengiriman
+          <Download /> Unduh Pengiriman
           </Button>
           <Link href="/dashboard/pengiriman/tambah">
-            <Button variant="default">Tambah Pengiriman</Button>
+            <Button variant="default"><CirclePlus></CirclePlus> Tambah Pengiriman</Button>
           </Link>
         </div>
       </div>
@@ -193,7 +193,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Data yang anda cari tidak ditemukan.
                 </TableCell>
               </TableRow>
             )}

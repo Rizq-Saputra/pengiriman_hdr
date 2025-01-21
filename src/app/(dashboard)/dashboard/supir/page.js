@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
-
+import { CirclePlus } from "lucide-react";
 
 export default function SupirPage() {
     const [drivers, setDrivers] = useState([]);
@@ -33,7 +33,7 @@ export default function SupirPage() {
                 <div className="flex justify-between items-center p-4">
                     <CardTitle className="text-2xl">Sopir</CardTitle>
                     <Link href="/dashboard/supir/tambah" className="ml-auto">
-                        <Button>Tambah Sopir</Button>
+                        <Button><CirclePlus /> Tambah Sopir</Button>
                     </Link>
                 </div>
             </Card>

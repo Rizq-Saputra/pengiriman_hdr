@@ -1,5 +1,6 @@
 "use client";
 import { MoreHorizontal } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -92,15 +93,15 @@ const ActionCell = ({ row, onRefresh }) => {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link href={`/dashboard/barang/${data.barang_id}/edit`}>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem className="text-yellow-600 cursor-pointer"><Pencil></Pencil> Edit</DropdownMenuItem>
         </Link>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem
-              className="text-red-600"
+              className="text-red-600 cursor-pointer"
               onSelect={(e) => e.preventDefault()}
             >
-              Hapus
+            <Trash2></Trash2>  Hapus
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>

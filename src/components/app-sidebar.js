@@ -119,7 +119,7 @@ export function AppSidebar() {
               <SidebarMenuButton asChild onClick={handleLogout}>
                 <button className="text-destructive font-bold p-4 mb-2 hover:text-destructive">
                   <LogOut />
-                  <span>Logout</span>
+                  <span>Keluar</span>
                 </button>
               </SidebarMenuButton>
             </SidebarMenuItem>
