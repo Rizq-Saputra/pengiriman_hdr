@@ -30,6 +30,8 @@ import { Label } from "@/components/ui/label";
 import * as React from "react";
 import { PhoneCall } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
+
 // Import FilePond styles
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -238,6 +240,7 @@ export default function DeliveryDetails({ id }) {
 
   return (
     <div className="p-8 w-full">
+      <VeryTopBackButton />
       <Card>
         <CardHeader>
           <CardTitle>Detail Pengiriman</CardTitle>
@@ -315,6 +318,17 @@ export default function DeliveryDetails({ id }) {
                 ))}
               </TableBody>
             </Table>
+          </div>
+          <div className="flex justify-between items-center border-gray-200 pt-4 px-4 mt-4">
+            <p className="text-lg">Ongkir</p>
+            <p className="text-lg">
+              {Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).format(data.ongkir)}
+            </p>
           </div>
           <div className="flex justify-between items-center border-t-2 border-gray-200 pt-4 px-4 mt-4">
             <p className="text-lg font-medium">Total</p>

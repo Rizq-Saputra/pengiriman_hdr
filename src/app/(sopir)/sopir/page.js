@@ -31,7 +31,7 @@ export default function Sopir() {
 
   return (
     <div className="p-8 w-full">
-      <Card className="text-center max-w-xs md:max-w-full mb-4">
+      <Card className="mx-auto text-center max-w-xs md:max-w-full mb-4">
         <CardHeader>
           <CardTitle className="text-lg md:text-2xl">
             Total Pengiriman Anda

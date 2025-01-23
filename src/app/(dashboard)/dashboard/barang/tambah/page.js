@@ -1,5 +1,10 @@
 import BarangForm from "../barang-form";
-
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 export default function AddBarang() {
-  return <BarangForm mode="add" initialData={{}} />;
-} 
+  return (
+    <div>
+      <VeryTopBackButton />
+      <BarangForm mode="add" initialData={{}} />;
+    </div>
+  );
+}

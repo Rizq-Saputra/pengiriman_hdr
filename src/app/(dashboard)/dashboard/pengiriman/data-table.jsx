@@ -140,7 +140,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
           </Select>
         </div>
 
-        <div className="space-x-2 flex items-center flex-col sm:flex-row">
+        <div className="space-x-2 flex items-center flex-col gap-2 sm:flex-row">
           <Button variant="success" onClick={downloadExcel}>
           <Download /> Unduh Pengiriman
           </Button>

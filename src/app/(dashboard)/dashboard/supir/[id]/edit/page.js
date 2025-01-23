@@ -1,10 +1,11 @@
- "use client";
+"use client";
 
 import SupirForm from "../../supir-form";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 
 export default function EditSupirPage() {
   const { id } = useParams();
@@ -16,7 +17,7 @@ export default function EditSupirPage() {
         const response = await fetchWithAuth(`/api/supir/${id}`);
         setInitialData(response.body);
       } catch (error) {
-        console.error('Error fetching driver data:', error);
+        console.error("Error fetching driver data:", error);
       }
     };
     fetchData();
@@ -24,5 +25,10 @@ export default function EditSupirPage() {
 
   if (!initialData) return <Loading />;
 
-  return <SupirForm mode="edit" initialData={initialData} />;
+  return (
+    <div>
+      <VeryTopBackButton />
+      <SupirForm mode="edit" initialData={initialData} />;
+    </div>
+  );
 }

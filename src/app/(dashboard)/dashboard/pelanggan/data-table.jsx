@@ -66,7 +66,7 @@ export function DataTable({ columns, data, loading, onRefresh }) {
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-2">
         <div className="relative w-64">
           <Input
             placeholder="Cari data..."
@@ -125,7 +125,7 @@ export function DataTable({ columns, data, loading, onRefresh }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                 Data Pelanggan tidak ditemukan
                 </TableCell>
               </TableRow>
             )}

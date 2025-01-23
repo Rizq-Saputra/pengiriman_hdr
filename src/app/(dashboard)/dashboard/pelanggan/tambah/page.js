@@ -1,5 +1,10 @@
 import PelangganForm from "../pelanggan-form";
-
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 export default function AddPelanggan() {
-  return <PelangganForm mode="add" initialData={{}} />;
+    return (
+      <div>
+        <VeryTopBackButton />
+        <PelangganForm mode="add" initialData={{}} />
+      </div>
+    );
 } 

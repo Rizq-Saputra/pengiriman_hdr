@@ -23,33 +23,27 @@ export default function Home() {
   const produkData = [
     {
       id: 1,
-      title: "Produk 1",
+      title: "Kayu Meranti",
       description: "Deskripsi produk 1",
-      imageUrl: "/product.png",
+      imageUrl: "/meranti.png",
     },
     {
       id: 2,
-      title: "Produk 2",
+      title: "Papan",
       description: "Deskripsi produk 2",
-      imageUrl: "/product.png",
+      imageUrl: "/papan.png",
     },
     {
       id: 3,
-      title: "Produk 3",
+      title: "Kayu Ulin",
       description: "Deskripsi produk 3",
-      imageUrl: "/product.png",
+      imageUrl: "/ulin.png",
     },
     {
       id: 4,
-      title: "Produk 4",
+      title: "Septic Tank",
       description: "Deskripsi produk 4",
-      imageUrl: "/product.png",
-    },
-    {
-      id: 5,
-      title: "Produk 5",
-      description: "Deskripsi produk 5",
-      imageUrl: "/product.png",
+      imageUrl: "/septictank.png",
     },
   ];
 

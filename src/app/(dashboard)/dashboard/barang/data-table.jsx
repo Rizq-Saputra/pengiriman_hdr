@@ -92,7 +92,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center justify-between py-4 gap-2">
         <div className="flex gap-4 items-center">
           <div className="relative w-64">
             <Input
@@ -164,7 +164,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Barang Tidak Ditemukan.
                 </TableCell>
               </TableRow>
             )}

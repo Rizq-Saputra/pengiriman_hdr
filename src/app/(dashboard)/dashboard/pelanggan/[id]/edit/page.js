@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 
 export default function EditPelangganPage() {
   const { id } = useParams();
@@ -26,5 +27,10 @@ export default function EditPelangganPage() {
 
   if (!initialData) return <Loading />;
 
-  return <PelangganForm mode="edit" initialData={initialData} />;
+  return (
+    <div>
+      <VeryTopBackButton />
+      <PelangganForm mode="edit" initialData={initialData} />
+    </div>
+  );
 } 

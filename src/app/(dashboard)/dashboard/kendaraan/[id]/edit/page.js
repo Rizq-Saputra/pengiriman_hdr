@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 
 export default function EditKendaraanPage() {
   const { id } = useParams();
@@ -26,5 +27,10 @@ export default function EditKendaraanPage() {
 
   if (!initialData) return <Loading />;
 
-  return <KendaraanForm mode="edit" initialData={initialData} />;
+  return (
+  <div>
+      <VeryTopBackButton />
+
+  <KendaraanForm mode="edit" initialData={initialData} />;
+  </div>);
 } 

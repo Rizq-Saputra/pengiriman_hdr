@@ -22,7 +22,7 @@ export function Footer({ children }) {
         <p className="text-sm text-muted-foreground">
           © Copyright 2025 UD Haderah Samarinda.
         </p>
-        <p className="text-xs text-muted-foreground mt-1 mb-3">
+        <p className="text-xs text-muted-foreground mt-1 mb-2">
           Jl. KH Wahid Hasyim 2 Samping Perum TVRI No.22, Samarinda Utara
         </p>
         <ul className="flex justify-center text-white gap-3 sm:gap-4 sm:mt-10">

@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./loading";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
-
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 export default function EditBarangPage() {
   const { id } = useParams();
   const [initialData, setInitialData] = useState(null);
@@ -25,5 +25,10 @@ export default function EditBarangPage() {
 
   if (!initialData) return <Loading />;
 
-  return <BarangForm mode="edit" initialData={initialData} />;
-} 
+  return (
+    <div>
+      <VeryTopBackButton />
+      <BarangForm mode="edit" initialData={initialData} />;
+    </div>
+  );
+}
