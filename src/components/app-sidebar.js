@@ -64,7 +64,7 @@ async function handleLogout() {
   } finally {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    redirect("/login");
+    redirect("/");
   }
 }
 

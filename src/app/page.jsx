@@ -221,9 +221,6 @@ export default function Home() {
                             <CardTitle className="text-xl font-semibold">
                               {produk.title}
                             </CardTitle>
-                            <CardDescription className="text-gray-600">
-                              {produk.description}
-                            </CardDescription>
                           </CardHeader>
                         </CardContent>
                       </Card>

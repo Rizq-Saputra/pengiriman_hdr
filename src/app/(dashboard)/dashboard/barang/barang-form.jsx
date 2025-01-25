@@ -47,7 +47,6 @@ export default function BarangForm({ initialData, mode }) {
     e.preventDefault();
     setIsLoading(true);
 
-    // Validasi data menggunakan Zod
     const validationResult = barangSchema.safeParse({
       ...formData,
       harga: parseFloat(formData.harga),
@@ -73,6 +72,12 @@ export default function BarangForm({ initialData, mode }) {
       );
 
       if (!response.ok) {
+        showAlert({
+          title: "Kesalahan saat memperbarui barang",
+          text: "Terjadi kesalahan saat memperbarui barang.",
+          icon: "error",
+        });
+
         setError(
           response.body?.message || "Terjadi kesalahan saat memperbarui barang."
         );
@@ -91,6 +96,12 @@ export default function BarangForm({ initialData, mode }) {
       });
       console.log(response);
       if (!response.ok) {
+        showAlert({
+          title: "Kesalahan saat menambahkan barang",
+          text: response.body.message,
+          icon: "error",
+        });
+
         setError(
           response.body?.message || "Terjadi kesalahan saat menambahkan barang."
         );
@@ -150,7 +161,10 @@ export default function BarangForm({ initialData, mode }) {
               <SelectContent>
                 <SelectItem value="Meranti">Meranti</SelectItem>
                 <SelectItem value="Ulin">Ulin</SelectItem>
-                <SelectItem value="Kategori 3">Kategori 3</SelectItem>
+                <SelectItem value="Kapur">Kapur</SelectItem>
+                <SelectItem value="Kruing">Kruing</SelectItem>
+                <SelectItem value="Septic Tank">Septic Tank</SelectItem>
+                <SelectItem value="Bahan Bangunan">Bahan Bangunan</SelectItem>
               </SelectContent>
             </Select>
             {error?.kategori && (

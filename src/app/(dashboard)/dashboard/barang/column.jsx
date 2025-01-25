@@ -36,7 +36,6 @@ const ActionCell = ({ row, onRefresh }) => {
       });
 
       if (response.ok) {
-        // Success alert with Swal
         showAlert({
           title: "Sukses",
           text: "Barang Berhasil Dihapus",
@@ -51,7 +50,6 @@ const ActionCell = ({ row, onRefresh }) => {
           response.status === 500 ||
           (errorData && errorData.message?.toLowerCase().includes("relasi"))
         ) {
-          // Error alert for relational errors
           showAlert({
             title: "Gagal Menghapus",
             text: "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
@@ -59,7 +57,6 @@ const ActionCell = ({ row, onRefresh }) => {
             confirmButtonText: "OK",
           });
         } else {
-          // Error alert for other errors
           showAlert({
             title: "Gagal Menghapus data",
             text:
@@ -71,7 +68,6 @@ const ActionCell = ({ row, onRefresh }) => {
         }
       }
     } catch (error) {
-      // Error alert for unexpected errors
       showAlert({
         title: "Gagal Menghapus data",
         text: "Gagal menghapus data karena masih memiliki relasi dengan data lain ",

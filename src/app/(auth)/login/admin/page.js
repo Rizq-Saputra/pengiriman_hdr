@@ -140,7 +140,7 @@ export default function Login() {
           <CardFooter className="flex gap-4 flex-col">
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <Button type="submit" variant="default" className="w-full" disabled={loading}>
-              {loading ? "Loading..." : "Masuk"}
+              {loading ? "Menunggu..." : "Masuk"}
             </Button>
           </CardFooter>
         </form>

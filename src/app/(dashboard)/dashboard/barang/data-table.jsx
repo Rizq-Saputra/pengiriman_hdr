@@ -34,7 +34,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
     () => (loading ? Array(10).fill({}) : data),
     [loading, data]
   );
-  
+
   const tableColumns = React.useMemo(
     () =>
       loading
@@ -62,10 +62,10 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
   );
 
   useEffect(() => {
-    onRefresh({ 
-      pageIndex, 
+    onRefresh({
+      pageIndex,
       pageSize,
-      kategori: categoryFilter === "all" ? "" : categoryFilter 
+      kategori: categoryFilter === "all" ? "" : categoryFilter,
     });
   }, [pageIndex, pageSize, categoryFilter, onRefresh]);
 
@@ -114,12 +114,18 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
               <SelectItem value="all">Semua Kategori</SelectItem>
               <SelectItem value="Ulin">Ulin</SelectItem>
               <SelectItem value="Meranti">Meranti</SelectItem>
+              <SelectItem value="Kapur">Kapur</SelectItem>
+              <SelectItem value="Kruing">Kruing</SelectItem>
+              <SelectItem value="Septic Tank">Septic Tank</SelectItem>
+              <SelectItem value="Bahan Bangunan">Bahan Bangunan</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <Link href="/dashboard/barang/tambah">
-          <Button variant="default"><CirclePlus></CirclePlus> Tambah Barang</Button>
+          <Button variant="default">
+            <CirclePlus></CirclePlus> Tambah Barang
+          </Button>
         </Link>
       </div>
 
