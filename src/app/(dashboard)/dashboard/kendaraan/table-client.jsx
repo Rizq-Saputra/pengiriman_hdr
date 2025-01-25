@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { DataTable } from "./data-table";
 import { columns } from "./column";
 import { fetchWithAuth } from '@/lib/fetchWithAuth';
-import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function TableClient() {
     const [data, setData] = useState([]);
