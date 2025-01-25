@@ -12,9 +12,9 @@ const nextConfig = {
                 port: '',
             },
             {
-                protocol: 'http',
-                hostname: 'localhost',
-                port: '5000',
+                protocol: process.env.NEXT_PUBLIC_BACKEND_API_URL.startsWith('https') ? 'https' : 'http',
+                hostname: new URL(process.env.NEXT_PUBLIC_BACKEND_API_URL).hostname,
+                port: new URL(process.env.NEXT_PUBLIC_BACKEND_API_URL).port || '',
                 pathname: '/uploads/**',
             },
         ],
