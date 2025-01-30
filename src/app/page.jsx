@@ -103,7 +103,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
             <Link href={"/login/admin"}>
-              <Card className="p-8 text-center transition-colors cursor-pointer flex flex-col items-center hover:bg-[#24277a] hover:text-white group">
+              <Card className="p-8 text-center transition-colors cursor-pointer flex flex-col items-center hover:bg-[#24277a] hover:text-white shadow-lg hover:shadow-xl duration-300 group">
                 <CardHeader>
                   <CardDescription className="hover:stroke-white">
                     <svg
@@ -128,7 +128,7 @@ export default function Home() {
               </Card>
             </Link>
             <Link href={"/pelanggan"}>
-              <Card className="p-8 text-center transition-colors cursor-pointer flex flex-col items-center  hover:bg-[#24277a] hover:text-white group">
+              <Card className="p-8 text-center transition-colors cursor-pointer flex flex-col items-center  hover:bg-[#24277a] shadow-lg hover:shadow-xl duration-300 hover:text-white group">
                 <CardHeader>
                   <CardDescription>
                     <svg
@@ -163,7 +163,7 @@ export default function Home() {
               </Card>
             </Link>
             <Link href={"/login/sopir"}>
-              <Card className="p-8 text-center  hover:bg-[#24277a] hover:text-white group transition-colors cursor-pointer flex flex-col items-center">
+              <Card className="p-8 text-center  hover:bg-[#24277a] hover:text-white group transition-colors cursor-pointer flex flex-col shadow-lg hover:shadow-xl duration-300 items-center">
                 <CardHeader>
                   <CardDescription>
                     <svg

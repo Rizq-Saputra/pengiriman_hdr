@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSwal } from "@/hooks/use-swal";
 import { z } from "zod";
-
+import Image from "next/image";
 // Define Zod schema for validation
 const loginSchema = z.object({
   no_telepon: z
@@ -78,11 +78,11 @@ export default function LoginSopir() {
         setErrors(fieldErrors);
       } else {
         // Show error using SweetAlert
-      showAlert({
-        icon: "error",
-        title: "Gagal Masuk",
-        text: err.message,
-      });
+        showAlert({
+          icon: "error",
+          title: "Gagal Masuk",
+          text: err.message,
+        });
       }
     } finally {
       setLoading(false);
@@ -90,19 +90,33 @@ export default function LoginSopir() {
   };
 
   return (
-    <div className="grid place-items-center min-h-screen p-8">
+    <div className="grid place-items-center min-h-screen p-8 bg-gradient-to-br from-blue-500 to-red-500">
       <VeryTopBackButton />
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Sopir</CardTitle>
-          <CardDescription>
+      <Card className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
+        <CardHeader className="flex flex-col items-center">
+          {/* Logo */}
+          <div className="mb-4">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={100}
+              height={100}
+              className="rounded-full"
+            />
+          </div>
+          <CardTitle className="text-2xl text-cente">
+            Sopir
+          </CardTitle>
+          <CardDescription className="text-center">
             Masukan nomor telepon dan sandi untuk masuk.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="nope">No. HP</Label>
+              <Label htmlFor="nope" className="text-[#2C3192]">
+                No. HP
+              </Label>
               <Input
                 id="no-telepon"
                 type="text"
@@ -112,13 +126,16 @@ export default function LoginSopir() {
                   setNope(e.target.value);
                   setErrors((prev) => ({ ...prev, no_telepon: null }));
                 }}
+                className="border-2 border-[#2C3192] focus:border-[#EC1F25] p-2 rounded-md w-full"
               />
               {errors.no_telepon && (
                 <p className="text-red-500 text-sm">{errors.no_telepon}</p>
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Sandi</Label>
+              <Label htmlFor="password" className="text-[#2C3192]">
+                Sandi
+              </Label>
               <Input
                 id="password"
                 placeholder="Masukkan Sandi"
@@ -128,14 +145,19 @@ export default function LoginSopir() {
                   setPassword(e.target.value);
                   setErrors((prev) => ({ ...prev, password: null }));
                 }}
+                className="border-2 border-[#2C3192] focus:border-[#EC1F25] p-2 rounded-md w-full"
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">{errors.password}</p>
               )}
             </div>
           </CardContent>
-          <CardFooter className="flex gap-4 flex-col">
-            <Button type="submit" className="w-full" disabled={loading}>
+          <CardFooter className="flex flex-col gap-4">
+            <Button
+              type="submit"
+              className="w-full text-white rounded-md p-2"
+              disabled={loading}
+            >
               {loading ? "Loading..." : "Masuk"}
             </Button>
           </CardFooter>

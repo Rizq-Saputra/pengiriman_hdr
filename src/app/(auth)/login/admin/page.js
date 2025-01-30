@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useSwal } from "@/hooks/use-swal"; // Import useSwal
+import Image from "next/image"; // Import Image dari Next.js
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -86,32 +87,52 @@ export default function Login() {
   };
 
   return (
-    <div className="grid place-items-center min-h-screen p-8">
+    <div
+      className="min-h-screen flex items-center justify-center p-8"
+      style={{
+        background: "linear-gradient(135deg, #2C3192, #EC1F25)",
+      }}
+    >
       <VeryTopBackButton />
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl mx-auto">Admin</CardTitle>
-          <CardDescription>
+      <Card className="w-full max-w-md bg-[#F3F2F7] shadow-lg">
+        <CardHeader className="flex flex-col items-center">
+          {/* Logo */}
+          <div className="mb-4">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={100}
+              height={100}
+              className="rounded-full"
+            />
+          </div>
+          <CardTitle className="text-2xl text-[#2C3192]">Admin</CardTitle>
+          <CardDescription className="text-center text-[#2C3192]">
             Masukan nama dan sandi untuk masuk ke halaman.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit} autoComplete="off">
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Nama</Label>
+              <Label htmlFor="username" className="text-[#2C3192]">
+                Nama
+              </Label>
               <Input
                 id="username"
                 type="text"
                 placeholder="Masukkan Nama"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="border-[#2C3192] focus:border-[#EC1F25]"
               />
               {formErrors.username && (
                 <p className="text-red-500 text-sm">{formErrors.username[0]}</p>
               )}
             </div>
             <div className="space-y-2 relative">
-              <Label htmlFor="password">Sandi</Label>
+              <Label htmlFor="password" className="text-[#2C3192]">
+                Sandi
+              </Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -119,11 +140,12 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="border-[#2C3192] focus:border-[#EC1F25]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-600"
+                  className="absolute inset-y-0 right-3 flex items-center text-[#2C3192]"
                 >
                   {showPassword ? (
                     <EyeOff size={20} aria-label="Hide password" />
@@ -139,7 +161,11 @@ export default function Login() {
           </CardContent>
           <CardFooter className="flex gap-4 flex-col">
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" variant="default" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full text-white"
+              disabled={loading}
+            >
               {loading ? "Menunggu..." : "Masuk"}
             </Button>
           </CardFooter>
