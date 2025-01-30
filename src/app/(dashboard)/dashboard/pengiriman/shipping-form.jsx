@@ -18,11 +18,9 @@ import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useSwal } from "@/hooks/use-swal";
 import { STATUS_PENGIRIMAN, STATUS_PEMBAYARAN } from "@/constants/status";
 import { useRouter } from "next/navigation";
-import { CirclePlus } from "lucide-react";
 
 export default function ShippingForm({ initialData, mode }) {
   const { showAlert, showPostRedirectAlert } = useSwal();
-  // use router
   const router = useRouter();
 
   const [items, setItems] = React.useState(

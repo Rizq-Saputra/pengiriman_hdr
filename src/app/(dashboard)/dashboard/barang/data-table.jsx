@@ -53,6 +53,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
 
   const [globalFilter, setGlobalFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+
   const pagination = React.useMemo(
     () => ({
       pageIndex,
@@ -81,7 +82,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
-    manualPagination: true,
+    manualPagination: true,  // Keep pagination controlled by the backend
     onRefresh,
   });
 
@@ -204,3 +205,4 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
     </div>
   );
 }
+

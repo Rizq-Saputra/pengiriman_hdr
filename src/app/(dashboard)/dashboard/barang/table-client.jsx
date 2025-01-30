@@ -10,6 +10,7 @@ export default function TableClient() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageCount, setPageCount] = useState(0);
+
   const fetchData = useCallback(
     async ({ pageIndex = 0, pageSize = 5, kategori = "" } = {}) => {
       setLoading(true);
@@ -45,6 +46,7 @@ export default function TableClient() {
         data={data}
         loading={loading}
         onRefresh={fetchData}
+        pageCount={pageCount}
       />
     </>
   );
