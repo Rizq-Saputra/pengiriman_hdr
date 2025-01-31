@@ -121,10 +121,6 @@ export const columns = [
     header: "No. Telepon",
   },
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
     id: "actions",
     header: "Actions",
     cell: ({ row, table }) => {

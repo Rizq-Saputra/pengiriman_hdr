@@ -13,7 +13,7 @@ const VeryTopBackButton = React.forwardRef(({ className, ...props }, ref) => {
     <button
       onClick={handleBack}
       className={cn(
-        "absolute top-3 left-16 z-50 p-2 rounded-full bg-white shadow-md",
+        "absolute top-3 left-16 z-50 p-2 rounded-full bg-white shadow-md hover:bg-white hover:shadow-lg transition-all duration-200 ease-in-out",
         className
       )}
       ref={ref}

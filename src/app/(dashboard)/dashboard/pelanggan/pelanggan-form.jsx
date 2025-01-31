@@ -18,16 +18,11 @@ export default function PelangganForm({ initialData, mode }) {
 
   const [formData, setFormData] = React.useState({
     nama_pelanggan: initialData?.data?.nama_pelanggan || "",
-    email: initialData?.data?.email || "",
     no_telepon: initialData?.data?.no_telepon || "",
   });
 
   const schema = z.object({
     nama_pelanggan: z.string().nonempty("Nama harus diisi."),
-    email: z
-      .string()
-      .nonempty("Email harus diisi.")
-      .email("Format email tidak valid."),
     no_telepon: z
       .string()
       .nonempty("No telepon harus diisi.")
@@ -77,7 +72,7 @@ export default function PelangganForm({ initialData, mode }) {
               : errors
           );
         } else {
-          throw new Error("Pastikan Nomor Telepon dan Email tidak sama");
+          throw new Error("Pastikan nama dan nomor Telepon tidak sama");
         }
         return;
       }
@@ -124,22 +119,6 @@ export default function PelangganForm({ initialData, mode }) {
               <p className="text-red-500 text-sm">
                 {fieldErrors.nama_pelanggan[0]}
               </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              placeholder="Masukkan email"
-            />
-            {fieldErrors.email && (
-              <p className="text-red-500 text-sm">{fieldErrors.email[0]}</p>
             )}
           </div>
 

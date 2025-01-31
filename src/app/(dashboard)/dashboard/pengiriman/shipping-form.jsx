@@ -3,6 +3,28 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Trash2, ChevronsUpDown, Check} from "lucide-react";
+import { fetchWithAuth } from "@/lib/fetchWithAuth";
+import { useSwal } from "@/hooks/use-swal";
+import { STATUS_PENGIRIMAN, STATUS_PEMBAYARAN } from "@/constants/status";
+import { useRouter } from "next/navigation";
+import {VeryTopBackButton} from "@/components/ui/very-top-back-button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -10,14 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Trash2 } from "lucide-react";
-import { fetchWithAuth } from "@/lib/fetchWithAuth";
-import { useSwal } from "@/hooks/use-swal";
-import { STATUS_PENGIRIMAN, STATUS_PEMBAYARAN } from "@/constants/status";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function ShippingForm({ initialData, mode }) {
   const { showAlert, showPostRedirectAlert } = useSwal();
@@ -53,26 +68,10 @@ export default function ShippingForm({ initialData, mode }) {
     initialData?.data?.bukti_pengiriman || ""
   );
   const [loading, setLoading] = React.useState(false);
-  const addItem = () =>
-    setItems([...items, { jumlah_barang: 1, barang_id: "", subtotal: 0 }]);
-
-  const updateItem = (index, field, value) => {
-    const newItems = [...items];
-    newItems[index] = { ...newItems[index], [field]: value };
-    setItems(newItems);
-  };
-
-  const deleteItem = (index) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-    setItems(newItems);
-  };
-
   const [barangList, setBarangList] = React.useState([]);
   const [supirList, setSupirList] = React.useState([]);
   const [pelangganList, setPelangganList] = React.useState([]);
   const [kendaraanList, setKendaraanList] = React.useState([]);
-  // With memoization - barangList is stable between renders
   const memoizedBarangList = React.useMemo(() => barangList, [barangList]);
   const memoizedSupirList = React.useMemo(() => supirList, [supirList]);
 
@@ -90,11 +89,31 @@ export default function ShippingForm({ initialData, mode }) {
       setSupirList(supirRes.body.data);
       setPelangganList(pelangganRes.body.data);
       setKendaraanList(kendaraanRes.body.data);
+      console.log(barangList);
     };
 
     fetchData();
   }, []);
 
+  // Fungsi untuk menambah item
+  const addItem = () =>
+    setItems([...items, { jumlah_barang: 1, barang_id: "", subtotal: 0 }]);
+
+  // Fungsi untuk mengupdate item
+  const updateItem = (index, field, value) => {
+    const newItems = [...items];
+    newItems[index] = { ...newItems[index], [field]: value };
+    setItems(newItems);
+  };
+
+  // Fungsi untuk menghapus item
+  const deleteItem = (index) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
+  };
+
+  // Handle submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -280,7 +299,6 @@ export default function ShippingForm({ initialData, mode }) {
         });
       }
 
-      // clear the form
       setItems([{ jumlah_barang: 0, barang_id: "", subtotal: 0 }]);
       setSupir("");
       setPelanggan("");
@@ -295,7 +313,8 @@ export default function ShippingForm({ initialData, mode }) {
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
+      <VeryTopBackButton />
+      <CardHeader className="relative">
         <CardTitle>
           {mode === "edit" ? "Edit Pengiriman" : "Tambah Pengiriman"}
         </CardTitle>
@@ -352,14 +371,13 @@ export default function ShippingForm({ initialData, mode }) {
                 </Button>
               </div>
             ))}
-
             <Button
               type="button"
               variant="outline"
               className="w-full"
               onClick={addItem}
             >
-               Tambah Barang
+              Tambah Barang
             </Button>
           </div>
 
@@ -384,24 +402,51 @@ export default function ShippingForm({ initialData, mode }) {
 
           <div className="space-y-2">
             <Label htmlFor="customer">Pelanggan</Label>
-            <Select
-              value={pelanggan}
-              onValueChange={(value) => setPelanggan(value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih pelanggan" />
-              </SelectTrigger>
-              <SelectContent>
-                {pelangganList.map((pelanggan) => (
-                  <SelectItem
-                    key={pelanggan.pelanggan_id}
-                    value={pelanggan.pelanggan_id.toString()}
-                  >
-                    {pelanggan.nama_pelanggan}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="w-full justify-between"
+                >
+                  {pelanggan
+                    ? pelangganList.find(
+                        (p) => p.pelanggan_id.toString() === pelanggan
+                      )?.nama_pelanggan
+                    : "Pilih pelanggan"}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Cari pelanggan..." />
+                  <CommandList>
+                    <CommandEmpty>Pelanggan tidak ditemukan.</CommandEmpty>
+                    <CommandGroup>
+                      {pelangganList.map((p) => (
+                        <CommandItem
+                          key={p.pelanggan_id}
+                          value={p.pelanggan_id.toString()}
+                          onSelect={() =>
+                            setPelanggan(p.pelanggan_id.toString())
+                          }
+                        >
+                          {p.nama_pelanggan}
+                          <Check
+                            className={cn(
+                              "ml-auto h-4 w-4",
+                              pelanggan === p.pelanggan_id.toString()
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">
@@ -525,7 +570,7 @@ export default function ShippingForm({ initialData, mode }) {
 
           <Button type="submit" className="w-full" disabled={loading}>
             {loading
-              ? "Loading..."
+              ? "Menunggu..."
               : mode === "edit"
               ? "Simpan Perubahan"
               : "Tambah Pengiriman"}
