@@ -29,7 +29,7 @@ export default function TableClient({ promise }) {
     <>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Pelanggan</CardTitle>
+          <CardTitle className="text-2xl">Sopir</CardTitle>
         </CardHeader>
       </Card>
       <DataTable
