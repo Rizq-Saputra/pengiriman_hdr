@@ -1,6 +1,6 @@
 "use client";
 
-import SupirForm from "../../supir-form";
+import SupirForm from "../../sopir-form";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loading from "./loading";

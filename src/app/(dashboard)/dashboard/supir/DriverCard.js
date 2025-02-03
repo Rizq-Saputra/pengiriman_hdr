@@ -26,16 +26,10 @@ import {
 import Link from "next/link";
 import { useSwal } from "@/hooks/use-swal";
 import { MoreVertical } from "lucide-react";
-import Image from "next/image";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 
 export default function DriverCard({ driver, onDelete }) {
   const { showAlert } = useSwal();
-
-  const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL;
-  const imageUrl = driver.gambar_supir
-    ? `${BASE_URL}${driver.gambar_supir}`
-    : "https://placehold.co/150x150";
 
   const handleDelete = async (id) => {
     try {
@@ -54,15 +48,15 @@ export default function DriverCard({ driver, onDelete }) {
       } else {
         showAlert({
           title: "Gagal Menghapus",
-            text: "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
-            icon: "error",
-            confirmButtonText: "OK",
+          text: "Data tidak dapat dihapus karena masih memiliki relasi dengan data lain",
+          icon: "error",
+          confirmButtonText: "OK",
         });
       }
     } catch (error) {
       showAlert({
         title: "Gagal Menghapus data",
-        text: "Gagal menghapus data karena masih memiliki relasi dengan data lain ",
+        text: "Gagal menghapus data karena masih memiliki relasi dengan data lain",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -74,7 +68,7 @@ export default function DriverCard({ driver, onDelete }) {
       <CardHeader className="p-0">
         <div className="w-full h-56 overflow-hidden">
           <img
-            src={`${imageUrl}`}
+            src="https://placehold.co/150x150"
             alt={`${driver.nama_supir} photo`}
             className="w-full h-full object-cover"
           />
@@ -83,7 +77,7 @@ export default function DriverCard({ driver, onDelete }) {
       <CardContent className="pt-4">
         <div className="flex justify-between items-start">
           <div className="flex flex-col text-left">
-            <CardTitle className="text-xl">{driver.nama_supir} </CardTitle>
+            <CardTitle className="text-xl">{driver.nama_supir}</CardTitle>
             <CardDescription>Antaran = {driver.jumlah_antaran}</CardDescription>
           </div>
           <DropdownMenu>
@@ -97,7 +91,9 @@ export default function DriverCard({ driver, onDelete }) {
               <DropdownMenuLabel>Aksi</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href={`/dashboard/supir/${driver.supir_id}/edit`}>
-                <DropdownMenuItem className="text-yellow-600 cursor-pointer"><Pencil/> Edit</DropdownMenuItem>
+                <DropdownMenuItem className="text-yellow-600 cursor-pointer">
+                  <Pencil /> Edit
+                </DropdownMenuItem>
               </Link>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -105,7 +101,7 @@ export default function DriverCard({ driver, onDelete }) {
                     className="text-red-600 cursor-pointer"
                     onSelect={(e) => e.preventDefault()}
                   >
-                  <Trash2/>  Hapus
+                    <Trash2 /> Hapus
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
                 <AlertDialogContent>

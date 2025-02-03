@@ -5,33 +5,27 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// Import React FilePond
-import { FilePond, registerPlugin } from "react-filepond";
-
-// Import FilePond styles
-import "filepond/dist/filepond.min.css";
-// Import the plugin code
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-
-// Import the plugin styles
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useSwal } from "@/hooks/use-swal";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 
-registerPlugin(FilePondPluginImagePreview);
-
 // Defining the validation schema with Zod
 const supirSchema = z.object({
-  nama_supir: z.string().min(3, "Nama supir harus terdiri dari minimal 3 karakter"),
-  no_telepon: z.string().min(10, "Nomor telepon harus terdiri dari minimal 10 karakter"),
-  gambar_supir: z.string().optional(),
+  nama_supir: z
+    .string()
+    .min(3, "Nama supir harus terdiri dari minimal 3 karakter"),
+  no_telepon: z
+    .string()
+    .min(10, "Nomor telepon harus terdiri dari minimal 10 karakter"),
   jumlah_antaran: z.number().min(0, "Jumlah antaran tidak bisa negatif"),
-  password: z.string().min(6, "Password harus terdiri dari minimal 6 karakter").optional(),
+  password: z
+    .string()
+    .min(6, "Password harus terdiri dari minimal 6 karakter")
+    .optional(),
 });
 
-export default function SupirForm({ initialData, mode }) {
+export default function SopirForm({ initialData, mode }) {
   const { showPostRedirectAlert, showAlert } = useSwal();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
@@ -39,7 +33,6 @@ export default function SupirForm({ initialData, mode }) {
   const [formData, setFormData] = React.useState({
     nama_supir: driverData?.nama_supir || "",
     no_telepon: driverData?.no_telepon || "",
-    gambar_supir: driverData?.gambar_supir || "",
     jumlah_antaran: driverData?.jumlah_antaran || 0,
     password: "",
   });
@@ -99,7 +92,6 @@ export default function SupirForm({ initialData, mode }) {
         setFormData({
           nama_supir: "",
           no_telepon: "",
-          gambar_supir: "",
           jumlah_antaran: 0,
           password: "",
         });
@@ -137,74 +129,6 @@ export default function SupirForm({ initialData, mode }) {
             />
             {errorData.nama_supir && (
               <p className="text-red-500 text-sm">{errorData.nama_supir}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="gambar_supir">Foto</Label>
-            <FilePond
-              allowMultiple={false}
-              server={{
-                url: `${process.env.NEXT_PUBLIC_BACKEND_API_URL}`,
-                load: (source, load, error) => {
-                  if (!source) {
-                    error("No source provided");
-                    return;
-                  }
-                  const fullUrl = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}${source}`;
-                  fetch(fullUrl)
-                    .then((res) => {
-                      if (!res.ok) throw new Error("Failed to load image");
-                      return res.blob();
-                    })
-                    .then(load)
-                    .catch(error);
-                },
-                process: {
-                  url: "/api/uploads",
-                  method: "POST",
-                  onload: (response) => {
-                    const parsedResponse = JSON.parse(response);
-                    setFormData((prev) => ({
-                      ...prev,
-                      gambar_supir: parsedResponse.path,
-                    }));
-                    return parsedResponse.path;
-                  },
-                },
-              }}
-              onremovefile={(error, file) => {
-                if (file.origin !== 1) {
-                  fetch(
-                    `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api${file.serverId}`,
-                    {
-                      method: "DELETE",
-                    }
-                  );
-                  setFormData((prev) => ({
-                    ...prev,
-                    gambar_supir: null,
-                  }));
-                }
-              }}
-              name="file"
-              labelIdle='Drag & Drop your file or <span class="filepond--label-action">Browse</span>'
-              acceptedFileTypes={["image/*"]}
-              plugins={[FilePondPluginImagePreview]}
-              allowRevert={true}
-              {...(mode === "edit" && formData.gambar_supir
-                ? {
-                    files: [
-                      {
-                        source: formData.gambar_supir,
-                        options: { type: "local" },
-                      },
-                    ],
-                  }
-                : {})}
-            />
-            {errorData.gambar_supir && (
-              <p className="text-red-500 text-sm">{errorData.gambar_supir}</p>
             )}
           </div>
 
