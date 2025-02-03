@@ -204,7 +204,7 @@ export const columns = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "Aksi",
     cell: ({ row, table }) => {
       return (
         <ActionCell

@@ -94,7 +94,7 @@ export default function DriverCard({ driver, onDelete }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>Aksi</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <Link href={`/dashboard/supir/${driver.supir_id}/edit`}>
                 <DropdownMenuItem className="text-yellow-600 cursor-pointer"><Pencil/> Edit</DropdownMenuItem>

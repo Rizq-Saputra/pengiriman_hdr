@@ -6,12 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash2, ChevronsUpDown, Check} from "lucide-react";
+import { Trash2, ChevronsUpDown, Check } from "lucide-react";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useSwal } from "@/hooks/use-swal";
 import { STATUS_PENGIRIMAN, STATUS_PEMBAYARAN } from "@/constants/status";
 import { useRouter } from "next/navigation";
-import {VeryTopBackButton} from "@/components/ui/very-top-back-button";
+import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 import {
   Command,
   CommandEmpty,
@@ -39,7 +39,10 @@ export default function ShippingForm({ initialData, mode }) {
   const router = useRouter();
 
   const [items, setItems] = React.useState(
-    initialData?.data?.DetailPengiriman || [{ jumlah_barang: 0, barang_id: "" }]
+    initialData?.data?.DetailPengiriman.map((item) => ({
+      ...item,
+      barang_id: item.barang_id.toString(), // Konversi ke string
+    })) || [{ jumlah_barang: 0, barang_id: "" }]
   );
 
   const [supir, setSupir] = React.useState(
@@ -89,7 +92,6 @@ export default function ShippingForm({ initialData, mode }) {
       setSupirList(supirRes.body.data);
       setPelangganList(pelangganRes.body.data);
       setKendaraanList(kendaraanRes.body.data);
-      console.log(barangList);
     };
 
     fetchData();
@@ -112,7 +114,6 @@ export default function ShippingForm({ initialData, mode }) {
     newItems.splice(index, 1);
     setItems(newItems);
   };
-
   // Handle submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -325,31 +326,57 @@ export default function ShippingForm({ initialData, mode }) {
             <Label>Barang</Label>
             {items.map((item, index) => (
               <div key={index} className="flex gap-4 items-center">
-                <Select
-                  value={item.barang_id.toString()}
-                  onValueChange={(value) => {
-                    const newItems = [...items];
-                    newItems[index] = {
-                      ...newItems[index],
-                      barang_id: value,
-                    };
-                    setItems(newItems);
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih barang" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {barangList.map((barang) => (
-                      <SelectItem
-                        key={barang.barang_id}
-                        value={barang.barang_id.toString()}
-                      >
-                        {barang.nama_barang}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className="w-full justify-between"
+                    >
+                      {item.barang_id
+                        ? barangList.find(
+                            (barang) =>
+                              barang.barang_id.toString() === item.barang_id
+                          )?.nama_barang
+                        : "Pilih barang"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Cari barang..." />
+                      <CommandList>
+                        <CommandEmpty>Barang tidak ditemukan.</CommandEmpty>
+                        <CommandGroup>
+                          {barangList.map((barang) => (
+                            <CommandItem
+                              key={barang.barang_id}
+                              value={barang.barang_id.toString()}
+                              onSelect={() => {
+                                const newItems = [...items];
+                                newItems[index] = {
+                                  ...newItems[index],
+                                  barang_id: barang.barang_id.toString(),
+                                };
+                                setItems(newItems);
+                              }}
+                            >
+                              {barang.nama_barang}
+                              <Check
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  item.barang_id === barang.barang_id.toString()
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <Input
                   type="number"
                   placeholder="Jumlah"
@@ -360,7 +387,6 @@ export default function ShippingForm({ initialData, mode }) {
                     updateItem(index, "jumlah_barang", parseInt(e.target.value))
                   }
                 />
-
                 <Button
                   type="button"
                   variant="ghost"
@@ -459,14 +485,18 @@ export default function ShippingForm({ initialData, mode }) {
                 <SelectValue placeholder="Pilih kendaraan" />
               </SelectTrigger>
               <SelectContent>
-                {kendaraanList.map((kendaraan) => (
-                  <SelectItem
-                    key={kendaraan.kendaraan_id}
-                    value={kendaraan.kendaraan_id.toString()}
-                  >
-                    {kendaraan.jenis_kendaraan} | {kendaraan.plat_nomor}
-                  </SelectItem>
-                ))}
+                {kendaraanList
+                  .filter(
+                    (kendaraan) => kendaraan.status_kendaraan === "tersedia"
+                  ) // Filter kendaraan yang tersedia
+                  .map((kendaraan) => (
+                    <SelectItem
+                      key={kendaraan.kendaraan_id}
+                      value={kendaraan.kendaraan_id.toString()}
+                    >
+                      {kendaraan.jenis_kendaraan} | {kendaraan.plat_nomor}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>

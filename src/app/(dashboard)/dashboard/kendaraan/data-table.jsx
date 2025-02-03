@@ -141,7 +141,7 @@ export function DataTable({ columns, data, loading, onRefresh }) {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Sebelumnya
           </Button>
           <Button
             variant="outline"
@@ -149,7 +149,7 @@ export function DataTable({ columns, data, loading, onRefresh }) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Berikutnya
           </Button>
         </div>
       )}

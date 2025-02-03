@@ -82,7 +82,7 @@ const ActionCell = ({ row, onRefresh }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link href={`/dashboard/kendaraan/${data.kendaraan_id}/edit`}>
           <DropdownMenuItem className="text-yellow-600 cursor-pointer"><Pencil/> Edit</DropdownMenuItem>
@@ -152,7 +152,7 @@ export const columns = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "Aksi",
     cell: ({ row, table }) => {
       return (
         <ActionCell

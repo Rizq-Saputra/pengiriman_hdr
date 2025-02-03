@@ -208,10 +208,10 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            Sebelumnya
           </Button>
           <span className="flex items-center gap-1">
-            <div>Page</div>
+            <div>Halaman</div>
             <strong>
               {table.getState().pagination.pageIndex + 1} of {pageCount}
             </strong>
@@ -222,7 +222,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            Berikutnya
           </Button>
         </div>
       )}

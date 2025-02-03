@@ -69,7 +69,7 @@ const ActionCell = ({ row, onRefresh }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link href={`/dashboard/pelanggan/${data.pelanggan_id}/edit`}>
           <DropdownMenuItem className="text-yellow-600 cursor-pointer">
@@ -122,7 +122,7 @@ export const columns = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "Aksi",
     cell: ({ row, table }) => {
       return (
         <ActionCell
