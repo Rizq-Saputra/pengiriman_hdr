@@ -118,32 +118,36 @@ export default function ShippingForm({ initialData, mode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     if (mode === "edit") {
-      // Compare initial and current items
       const initialItems = initialData.data.DetailPengiriman || [];
       const currentItems = items;
-
-      // Find items to add, update, and remove
+  
       const itemsToAdd = currentItems.filter(
         (item) =>
           !item.detail_pengiriman_id && item.barang_id && item.jumlah_barang > 0
       );
-
-      const itemsToUpdate = currentItems.filter(
-        (item) =>
-          item.detail_pengiriman_id &&
-          initialItems.some(
-            (initialItem) =>
-              initialItem.detail_pengiriman_id === item.detail_pengiriman_id &&
-              (initialItem.jumlah_barang !== item.jumlah_barang ||
-                initialItem.barang_id !== item.barang_id)
-          )
-      );
-
+  
+      const itemsToUpdate = currentItems.filter((item) => {
+        const initialItem = initialItems.find(
+          (initialItem) =>
+            initialItem.detail_pengiriman_id === item.detail_pengiriman_id
+        );
+        return (
+          initialItem &&
+          (initialItem.jumlah_barang !== item.jumlah_barang ||
+            initialItem.barang_id !== item.barang_id)
+        );
+      });
+  
       const itemsToRemove = initialItems.filter(
         (initialItem) =>
-          !currentItems.some((item) => item.barang_id === initialItem.barang_id)
+          !currentItems.some(
+            (item) =>
+              item.detail_pengiriman_id === initialItem.detail_pengiriman_id
+          )
       );
+  
       try {
         const data = {
           tanggal_pengiriman: initialData.data.tanggal_pengiriman,
@@ -153,13 +157,14 @@ export default function ShippingForm({ initialData, mode }) {
           pembayaran: pembayaran,
           ongkir: ongkir,
           total: items.reduce(
-            (acc, item) => parseInt(acc) + parseInt(item.subtotal),
+            (acc, item) => acc + (item.subtotal || 0),
             0
           ),
           kendaraan_id: parseInt(kendaraan),
           supir_id: parseInt(supir),
           pelanggan_id: parseInt(pelanggan),
         };
+  
         // Update main shipment data
         const response = await fetchWithAuth(
           `/api/pengiriman/${initialData.data.pengiriman_id}`,
@@ -168,11 +173,11 @@ export default function ShippingForm({ initialData, mode }) {
             body: JSON.stringify(data),
           }
         );
-
+  
         if (response.ok) {
           // Handle item changes
           const itemRequests = [];
-
+  
           // Add new items
           if (itemsToAdd.length > 0) {
             itemRequests.push(
@@ -188,7 +193,7 @@ export default function ShippingForm({ initialData, mode }) {
               })
             );
           }
-
+  
           // Update changed items
           if (itemsToUpdate.length > 0) {
             itemsToUpdate.forEach((item) => {
@@ -207,7 +212,7 @@ export default function ShippingForm({ initialData, mode }) {
               );
             });
           }
-
+  
           // Remove deleted items
           if (itemsToRemove.length > 0) {
             itemsToRemove.forEach((item) => {
@@ -221,7 +226,7 @@ export default function ShippingForm({ initialData, mode }) {
               );
             });
           }
-
+  
           // Execute all item requests
           await Promise.all(itemRequests);
           showPostRedirectAlert({
@@ -351,7 +356,7 @@ export default function ShippingForm({ initialData, mode }) {
                           {barangList.map((barang) => (
                             <CommandItem
                               key={barang.barang_id}
-                              value={barang.barang_id.toString()}
+                              value={barang.nama_barang} // Ubah dari barang_id ke nama_barang
                               onSelect={() => {
                                 const newItems = [...items];
                                 newItems[index] = {
@@ -377,6 +382,7 @@ export default function ShippingForm({ initialData, mode }) {
                     </Command>
                   </PopoverContent>
                 </Popover>
+
                 <Input
                   type="number"
                   placeholder="Jumlah"
@@ -452,7 +458,7 @@ export default function ShippingForm({ initialData, mode }) {
                       {pelangganList.map((p) => (
                         <CommandItem
                           key={p.pelanggan_id}
-                          value={p.pelanggan_id.toString()}
+                          value={p.nama_pelanggan}
                           onSelect={() =>
                             setPelanggan(p.pelanggan_id.toString())
                           }

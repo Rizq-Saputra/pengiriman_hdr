@@ -104,7 +104,7 @@ export default function PelangganForm({ initialData, mode }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
           <div className="space-y-2">
             <Label htmlFor="name">Nama</Label>
             <Input

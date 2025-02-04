@@ -158,7 +158,7 @@ export default function LoginSopir() {
               className="w-full text-white rounded-md p-2"
               disabled={loading}
             >
-              {loading ? "Loading..." : "Masuk"}
+              {loading ? "Menunggu..." : "Masuk"}
             </Button>
           </CardFooter>
         </form>
