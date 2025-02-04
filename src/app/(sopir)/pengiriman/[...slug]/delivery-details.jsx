@@ -363,8 +363,8 @@ export default function DeliveryDetails({ id }) {
             /> */}
           </div>
         )}
-
-        {data.status_pengiriman === STATUS_PENGIRIMAN.BELUM_DIKIRIM && (
+        {data.status_pengiriman === STATUS_PENGIRIMAN.BELUM_DIKIRIM ||
+        data.status_pengiriman === STATUS_PENGIRIMAN.DALAM_PENGIRIMAN ? (
           <div className="flex justify-end gap-x-2 mb-4">
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -413,17 +413,13 @@ export default function DeliveryDetails({ id }) {
                           method: "POST",
                           onload: (response) => {
                             const parsedResponse = JSON.parse(response);
-
                             setUpdateBuktiPengiriman(parsedResponse.path);
-
                             return parsedResponse.path;
                           },
                         },
                       }}
                       onremovefile={(error, file) => {
-                        // Check if this is a user-initiated removal and not an automatic replacement
                         if (file.origin !== 1) {
-                          // 1 indicates user removal
                           fetch(
                             `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api${file.serverId}`,
                             {
@@ -502,7 +498,8 @@ export default function DeliveryDetails({ id }) {
               </Link>
             </Button>
           </div>
-        )}
+        ) : null}
+        ;
       </Card>
     </div>
   );
