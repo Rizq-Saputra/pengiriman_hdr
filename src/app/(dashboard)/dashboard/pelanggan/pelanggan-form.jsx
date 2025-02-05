@@ -145,7 +145,7 @@ export default function PelangganForm({ initialData, mode }) {
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading
-              ? "Loading..."
+              ? "menyimpan..."
               : mode === "edit"
               ? "Simpan Perubahan"
               : "Tambah Pelanggan"}

@@ -270,7 +270,8 @@ export default function DeliveryDetails({ id }) {
               {data.Pelanggan.no_telepon}
             </Button>
           </Link>
-          <Badge className="p-2">{data.pembayaran}</Badge>
+          <Badge variant="warning" className="p-2 cursor-pointer">{data.status_pengiriman}</Badge>
+          <Badge className="p-2 cursor-pointer">{data.pembayaran}</Badge>
         </CardContent>
         <CardContent>
           <p>Alamat</p>

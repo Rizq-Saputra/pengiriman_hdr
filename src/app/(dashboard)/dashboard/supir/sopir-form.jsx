@@ -62,7 +62,7 @@ export default function SopirForm({ initialData, mode }) {
         );
 
         if (!response.ok) {
-          setError({ general: "An unexpected error occurred" });
+          setError({ general: "Pastikan Nomor telepon yang dimasukkan berbeda" });
         } else {
           showPostRedirectAlert({
             title: "Sukses",
@@ -78,7 +78,7 @@ export default function SopirForm({ initialData, mode }) {
         });
 
         if (!response.ok) {
-          setError({ general: "An unexpected error occurred" });
+          setError({ general: "Pastikan Nomor telepon yang dimasukkan berbeda" });
         } else {
           showPostRedirectAlert({
             title: "Sukses",
@@ -116,7 +116,7 @@ export default function SopirForm({ initialData, mode }) {
         <CardTitle>{mode === "edit" ? "Edit Sopir" : "Tambah Sopir"}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" autocomplete="off"> 
           <div className="space-y-2">
             <Label htmlFor="name">Nama</Label>
             <Input
