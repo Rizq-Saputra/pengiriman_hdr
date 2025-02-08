@@ -241,8 +241,8 @@ export default function ShippingForm({ initialData, mode }) {
         }
       } catch (error) {
         showAlert({
-          title: "Error!",
-          text: "Something went wrong. Please try again.",
+          title: "Gagal Mengubah Pengiriman!",
+          text: "Pastikan semua data terisi dengan benar",
           icon: "error",
           confirmButtonText: "OK",
         });

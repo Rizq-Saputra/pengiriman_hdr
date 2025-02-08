@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 import { useSwal } from "@/hooks/use-swal";
 import { z } from "zod";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
+
 // Define Zod schema for validation
 const loginSchema = z.object({
   no_telepon: z
@@ -32,6 +34,7 @@ export default function LoginSopir() {
   const { showPostRedirectAlert, showAlert } = useSwal();
   const [nope, setNope] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -104,9 +107,7 @@ export default function LoginSopir() {
               className="rounded-full"
             />
           </div>
-          <CardTitle className="text-2xl text-cente">
-            Sopir
-          </CardTitle>
+          <CardTitle className="text-2xl text-center">Sopir</CardTitle>
           <CardDescription className="text-center">
             Masukan nomor telepon dan sandi untuk masuk.
           </CardDescription>
@@ -132,21 +133,34 @@ export default function LoginSopir() {
                 <p className="text-red-500 text-sm">{errors.no_telepon}</p>
               )}
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 relative">
               <Label htmlFor="password" className="text-[#2C3192]">
                 Sandi
               </Label>
-              <Input
-                id="password"
-                placeholder="Masukkan Sandi"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setErrors((prev) => ({ ...prev, password: null }));
-                }}
-                className="border-2 border-[#2C3192] focus:border-[#EC1F25] p-2 rounded-md w-full"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  placeholder="Masukkan Sandi"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setErrors((prev) => ({ ...prev, password: null }));
+                  }}
+                  className="border-2 border-[#2C3192] focus:border-[#EC1F25] p-2 rounded-md w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-[#2C3192]"
+                >
+                  {showPassword ? (
+                    <EyeOff size={20} aria-label="Hide password" />
+                  ) : (
+                    <Eye size={20} aria-label="Show password" />
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-sm">{errors.password}</p>
               )}

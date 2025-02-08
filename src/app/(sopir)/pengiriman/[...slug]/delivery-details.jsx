@@ -270,7 +270,9 @@ export default function DeliveryDetails({ id }) {
               {data.Pelanggan.no_telepon}
             </Button>
           </Link>
-          <Badge variant="warning" className="p-2 cursor-pointer">{data.status_pengiriman}</Badge>
+          <Badge variant="warning" className="p-2 cursor-pointer">
+            {data.status_pengiriman}
+          </Badge>
           <Badge className="p-2 cursor-pointer">{data.pembayaran}</Badge>
         </CardContent>
         <CardContent>
@@ -339,7 +341,7 @@ export default function DeliveryDetails({ id }) {
                 currency: "IDR",
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
-              }).format(data.total)}
+              }).format(Number(data.total))}
             </p>
           </div>
         </div>
@@ -392,6 +394,17 @@ export default function DeliveryDetails({ id }) {
                     <Label htmlFor="gambar_supir">Bukti Pengiriman</Label>
                     <FilePond
                       allowMultiple={false}
+                      maxFileSize="2MB" // Batas ukuran file 2 MB
+                      onwarning={(error, file, status) => {
+                        if (error.code === 1) {
+                          // Error code 1 adalah ukuran file melebihi batas
+                          showAlert({
+                            title: "Ukuran File Melebihi Batas",
+                            text: "Ukuran file harus kurang dari 2 MB.",
+                            icon: "warning",
+                          });
+                        }
+                      }}
                       server={{
                         url: `${process.env.NEXT_PUBLIC_BACKEND_API_URL}`,
                         load: (source, load, error) => {

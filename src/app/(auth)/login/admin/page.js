@@ -16,7 +16,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { Eye, EyeOff } from "lucide-react";
-import { useSwal } from "@/hooks/use-swal"; // Import useSwal
+import { useSwal, showPostRedirectAlert } from "@/hooks/use-swal"; // Import useSwal
 import Image from "next/image"; // Import Image dari Next.js
 
 const formSchema = z.object({
@@ -37,7 +37,8 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { showAlert } = useSwal(); // Initialize useSwal
+  const { showPostRedirectAlert, showAlert } = useSwal();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,6 +73,12 @@ export default function Login() {
       const { token, refreshToken } = await res.json();
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", refreshToken);
+      // Tampilkan notifikasi sukses
+      showPostRedirectAlert({
+        title: "Sukses",
+        text: "Berhasil Masuk",
+        icon: "success",
+      });
       router.push("/dashboard");
     } catch (err) {
       setError(err.message);
