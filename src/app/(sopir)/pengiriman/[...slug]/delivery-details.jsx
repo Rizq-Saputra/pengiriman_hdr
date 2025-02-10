@@ -513,7 +513,6 @@ export default function DeliveryDetails({ id }) {
             </Button>
           </div>
         ) : null}
-        ;
       </Card>
     </div>
   );

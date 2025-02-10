@@ -43,7 +43,7 @@ export function DataTable({ columns, data, loading, onRefresh }) {
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5, // Initial page size
+    pageSize: 10,
   });
 
   const [globalFilter, setGlobalFilter] = useState([]);

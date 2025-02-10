@@ -50,7 +50,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
 
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   });
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -213,7 +213,7 @@ export function DataTable({ columns, data, loading, onRefresh, pageCount }) {
           <span className="flex items-center gap-1">
             <div>Halaman</div>
             <strong>
-              {table.getState().pagination.pageIndex + 1} of {pageCount}
+              {table.getState().pagination.pageIndex + 1} dari {pageCount}
             </strong>
           </span>
           <Button

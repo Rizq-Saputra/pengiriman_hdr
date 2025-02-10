@@ -117,8 +117,8 @@ const ActionCell = ({ row, onRefresh }) => {
         )} */}
         <Link
           href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
-            /\D/g,
-            ""
+           "08",
+           "628"
           )}&text=Halo%20${
             data.Pelanggan.nama_pelanggan
           },%20terima%20kasih%20telah%20berbelanja%20di%20UD%20Haderah%20Sempaja.%20Berikut%20kami%20informasikan%20nomor%20resi%20pengiriman%20Anda:%20${
