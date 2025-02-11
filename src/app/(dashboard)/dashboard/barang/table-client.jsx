@@ -12,7 +12,7 @@ export default function TableClient() {
   const [pageCount, setPageCount] = useState(0);
 
   const fetchData = useCallback(
-    async ({ pageIndex = 0, pageSize = 5, kategori = "" } = {}) => {
+    async ({ pageIndex = 0, pageSize = 10, kategori = "" } = {}) => {
       setLoading(true);
       try {
         const categoryQuery = kategori ? `&kategori=${kategori}` : "";

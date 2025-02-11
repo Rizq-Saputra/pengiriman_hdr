@@ -341,7 +341,7 @@ export default function DeliveryDetails({ id }) {
                 currency: "IDR",
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
-              }).format(Number(data.total))}
+              }).format(Number(data.total) + Number(data.ongkir))}
             </p>
           </div>
         </div>

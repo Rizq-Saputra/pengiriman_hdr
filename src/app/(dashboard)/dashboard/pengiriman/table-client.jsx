@@ -13,7 +13,7 @@ export default function TableClient() {
   const [pageCount, setPageCount] = useState(0);
 
   const fetchData = useCallback(
-    async ({ pageIndex = 0, pageSize = 5, status = "" } = {}) => {
+    async ({ pageIndex = 0, pageSize = 10, status = "" } = {}) => {
       setLoading(true);
       try {
         const statusQuery = status ? `&status_pengiriman=${status}` : "";

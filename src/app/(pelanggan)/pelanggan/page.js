@@ -187,20 +187,18 @@ export default function PelangganPage() {
               style: "currency",
               currency: "IDR",
               minimumFractionDigits: 0,
-            }).format(
-              delivery?.ongkir
-            )}
+            }).format(delivery?.ongkir)}
           </p>
         </div>
         <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-          <p className="text-sm text-muted-foreground">Total Harga</p>
+          <p className="text-sm text-muted-foreground">Total Harga + Ongkir</p>
           <p className="font-bold">
             {Intl.NumberFormat("id-ID", {
               style: "currency",
               currency: "IDR",
               minimumFractionDigits: 0,
             }).format(
-              delivery?.total
+              Number(delivery?.total || 0) + Number(delivery?.ongkir || 0)
             )}
           </p>
         </div>
