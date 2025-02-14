@@ -500,12 +500,11 @@ export default function DeliveryDetails({ id }) {
             </AlertDialog>
             <Button variant="success" asChild>
               <Link
-                href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
-                  /\D/g,
-                  ""
-                )}&text=Halo%20${
-                  data.Pelanggan.nama_pelanggan
-                },%20kami%20dari%20Kurir%20Express`}
+                href={`https://wa.me/${data.Pelanggan.no_telepon.replace(
+                  "08",
+                  "628"
+                )}`}
+                target="_blank"
               >
                 <PhoneCall size={16} />
                 Hubungi Pelanggan

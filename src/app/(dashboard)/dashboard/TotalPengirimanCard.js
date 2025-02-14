@@ -10,10 +10,13 @@ import { fetchWithAuth } from "@/lib/fetchWithAuth";
 // Simulate API call
 const fetchTotalPengiriman = async () => {
   // Simulate network delay
-  const response = await fetchWithAuth('/api/pengiriman/minggu-ini');
+  const response = await fetchWithAuth("/api/pengiriman/minggu-ini");
   const data = response.body.data;
-  const total = data.reduce((sum, item) => sum + item._count.tanggal_pengiriman, 0);
-  
+  const total = data.reduce(
+    (sum, item) => sum + item._count.tanggal_pengiriman,
+    0
+  );
+
   return total;
 };
 
@@ -46,10 +49,10 @@ export default function TotalPengirimanCard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center justify-center">
             <Skeleton className="h-32 w-32" />
           </div>
-          <Skeleton className="h-8 w-16 mx-auto mt-4" />
+          <Skeleton className="h-4 w-8 mx-auto mt-4" />
         </CardContent>
       </Card>
     );
@@ -63,11 +66,11 @@ export default function TotalPengirimanCard() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center justify-center gap-2">
-          <Truck size={isMobile ? 64 : 128} />
+        <div className="flex items-center justify-center">
+          <Truck size={isMobile ? 32 : 64} />
         </div>
         <p className="font-bold text-xl">{total}</p>
       </CardContent>
     </Card>
   );
-} 
+}

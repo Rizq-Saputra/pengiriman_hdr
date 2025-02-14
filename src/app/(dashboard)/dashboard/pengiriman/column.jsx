@@ -117,17 +117,19 @@ const ActionCell = ({ row, onRefresh }) => {
         )} */}
         <Link
           href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
-           "08",
-           "628"
-          )}&text=Halo%20${
-            data.Pelanggan.nama_pelanggan
-          },%20terima%20kasih%20telah%20berbelanja%20di%20UD%20Haderah%20Sempaja.%20Berikut%20kami%20informasikan%20nomor%20resi%20pengiriman%20Anda:%20${
-            data.resi
-          }.%20Silakan%20gunakan%20nomor%20resi%20ini%20untuk%20melacak%20pesanan%20Anda.%20Jika%20ada%20pertanyaan,%20jangan%20ragu%20untuk%20menghubungi%20kami.%20Terima%20kasih!`}
+            "08",
+            "628"
+          )}&text=${encodeURIComponent(
+            `Halo ${data.Pelanggan.nama_pelanggan}, terima kasih telah berbelanja di UD Haderah Sempaja. Berikut kami informasikan nomor resi pengiriman Anda:\n\n *${data.resi}* \n\n(Tekan dan tahan untuk menyalin)\n\nSilakan gunakan nomor resi ini untuk melacak pesanan Anda pada link berikut:\n🔗 https://haderah.vercel.app/\n\nJika ada pertanyaan, jangan ragu untuk menghubungi kami. Terima kasih!`
+          )}`}
           passHref
         >
-          <DropdownMenuItem as="a" className="text-green-600 cursor-pointer" target="_blank">
-          <Phone /> Whatsapp Pelanggan
+          <DropdownMenuItem
+            as="a"
+            className="text-green-600 cursor-pointer"
+            target="_blank"
+          >
+            <Phone /> Whatsapp Pelanggan
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
