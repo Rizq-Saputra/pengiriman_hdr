@@ -91,9 +91,9 @@ export default function PelangganPage() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">Supir</p>
+            <p className="text-sm text-muted-foreground">Sopir</p>
             <p className="font-medium">
-              {delivery?.Supir.nama_supir} - {delivery?.Supir.no_telepon}{" "}
+              {delivery?.Supir.nama_supir}{" "}
             </p>
             <Link
               href={`https://wa.me/${delivery?.Supir.no_telepon.replace(
@@ -104,7 +104,7 @@ export default function PelangganPage() {
             >
               <Button variant="success" className="text-sm">
                 <PhoneCall size={16} className="mr-2" />
-                WhatsApp Supir
+                WA Sopir
               </Button>
             </Link>
           </div>
@@ -122,7 +122,7 @@ export default function PelangganPage() {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Deskripsi</p>
-            <p className="font-medium border rounded py-2 px-3">
+            <p className="font-medium">
               {delivery?.deskripsi}
             </p>
           </div>

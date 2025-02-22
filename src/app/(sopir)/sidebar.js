@@ -138,7 +138,7 @@ export function SopirSidebar() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild onClick={handleLogout}>
-                <button className="text-destructive font-bold p-4 mb-2 hover:text-destructive">
+                <button className="text-destructive font-bold p-4 mb-2 hover:text-destructive transition-colors duration-500 ease-in-out ">
                   <LogOut />
                   <span>Keluar</span>
                 </button>

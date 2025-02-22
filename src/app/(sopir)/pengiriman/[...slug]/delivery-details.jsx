@@ -41,6 +41,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { STATUS_PENGIRIMAN } from "@/constants/status";
 import Link from "next/link";
 import { useSwal } from "@/hooks/use-swal";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -49,6 +50,7 @@ export default function DeliveryDetails({ id }) {
   const [updateDeskripsi, setUpdateDeskripsi] = useState(data?.deskripsi);
   const [updateBuktiPengiriman, setUpdateBuktiPengiriman] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isMobile = useIsMobile();
   const { showAlert } = useSwal();
 
   useEffect(() => {
@@ -258,6 +260,19 @@ export default function DeliveryDetails({ id }) {
           </p>
         </CardHeader>
         <CardContent className="flex space-x-2 items-center">
+          <Badge
+            variant={
+              data.status_pengiriman === "Dalam Pengiriman"
+                ? "warning"
+                : data.status_pengiriman === "Selesai"
+                ? "success"
+                : "destructive"
+            }
+            className="p-2 cursor-pointer text-nowrap"
+          >
+            {data.status_pengiriman}
+          </Badge>
+          <Badge className="p-2 cursor-pointer">{data.pembayaran}</Badge>
           <Link
             href={`https://wa.me/${data.Pelanggan.no_telepon.replace(
               "08",
@@ -265,15 +280,11 @@ export default function DeliveryDetails({ id }) {
             )}`}
             target="_blank"
           >
-            <Button variant="outline" className="text-sm">
+            <Button variant="success" className="text-sm">
               <PhoneCall size={16} className="mr-2" />
               {data.Pelanggan.no_telepon}
             </Button>
           </Link>
-          <Badge variant="warning" className="p-2 cursor-pointer">
-            {data.status_pengiriman}
-          </Badge>
-          <Badge className="p-2 cursor-pointer">{data.pembayaran}</Badge>
         </CardContent>
         <CardContent>
           <p>Alamat</p>
@@ -282,47 +293,79 @@ export default function DeliveryDetails({ id }) {
           <Textarea value={data.deskripsi} />
         </CardContent>
         <div className="p-8">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Barang</TableHead>
-                  <TableHead>Kategori</TableHead>
-                  <TableHead>Jumlah</TableHead>
-                  <TableHead>Harga</TableHead>
-                  <TableHead>Subtotal</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+          {!isMobile && (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Barang</TableHead>
+                    <TableHead>Jumlah</TableHead>
+                    <TableHead>Harga</TableHead>
+                    <TableHead>Subtotal</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {data.DetailPengiriman.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-semibold text-nowrap">
+                        {item.Barang.nama_barang}
+                      </TableCell>
+                      <TableCell>{item.jumlah_barang}</TableCell>
+                      <TableCell>
+                        {Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(item.Barang.harga)}
+                      </TableCell>
+                      <TableCell>
+                        {Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }).format(item.jumlah_barang * item.Barang.harga)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+
+          {/* TAMPILAN CARD (MOBILE) */}
+          {isMobile && (
+            <div className="rounded-lg">
+              <h2 className="text-lg font-semibold text-center mb-2">
+                Detail Pembelian
+              </h2>
+              <div className="border-t border-gray-300 py-2">
                 {data.DetailPengiriman.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-semibold text-nowrap">
-                      {item.Barang.nama_barang}
-                    </TableCell>
-                    <TableCell>{item.Barang.kategori}</TableCell>
-                    <TableCell className="">{item.jumlah_barang}</TableCell>
-                    <TableCell>
-                      {Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
-                      }).format(item.Barang.harga)}
-                    </TableCell>
-                    <TableCell>
+                  <div
+                    key={index}
+                    className="flex justify-between text-sm py-1 border-b border-dashed"
+                  >
+                    <span>{item.Barang.nama_barang}</span>
+                    <span>
+                      {item.jumlah_barang} ×{" "}
+                      {item.Barang.harga.toLocaleString("id-ID")}
+                    </span>
+                    <span className="font-medium">
                       {Intl.NumberFormat("id-ID", {
                         style: "currency",
                         currency: "IDR",
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 0,
                       }).format(item.jumlah_barang * item.Barang.harga)}
-                    </TableCell>
-                  </TableRow>
+                    </span>
+                  </div>
                 ))}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="flex justify-between items-center border-gray-200 pt-4 px-4 mt-4">
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-between items-center border-gray-200 pt-2 mt-4">
             <p className="text-lg">Ongkir</p>
             <p className="text-lg">
               {Intl.NumberFormat("id-ID", {
@@ -333,7 +376,7 @@ export default function DeliveryDetails({ id }) {
               }).format(data.ongkir)}
             </p>
           </div>
-          <div className="flex justify-between items-center border-t-2 border-gray-200 pt-4 px-4 mt-4">
+          <div className="flex justify-between items-center border-t-2 border-gray-200 pt-2 mt-4">
             <p className="text-lg font-medium">Total</p>
             <p className="text-lg font-bold">
               {Intl.NumberFormat("id-ID", {
@@ -368,7 +411,7 @@ export default function DeliveryDetails({ id }) {
         )}
         {data.status_pengiriman === STATUS_PENGIRIMAN.BELUM_DIKIRIM ||
         data.status_pengiriman === STATUS_PENGIRIMAN.DALAM_PENGIRIMAN ? (
-          <div className="flex justify-end gap-x-2 mb-4">
+          <div className="flex justify-center gap-x-2 mb-4">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button>Konfirmasi Pengiriman</Button>
@@ -490,7 +533,7 @@ export default function DeliveryDetails({ id }) {
                 <AlertDialogFooter>
                   <AlertDialogCancel>Batal</AlertDialogCancel>
                   <AlertDialogAction
-                    className="bg-primary text-white"
+                    className="bg-destructive text-white hover:bg-red-600"
                     onClick={handleCancel}
                   >
                     Ya, Batalkan
@@ -498,18 +541,6 @@ export default function DeliveryDetails({ id }) {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <Button variant="success" asChild>
-              <Link
-                href={`https://wa.me/${data.Pelanggan.no_telepon.replace(
-                  "08",
-                  "628"
-                )}`}
-                target="_blank"
-              >
-                <PhoneCall size={16} />
-                Hubungi Pelanggan
-              </Link>
-            </Button>
           </div>
         ) : null}
       </Card>
