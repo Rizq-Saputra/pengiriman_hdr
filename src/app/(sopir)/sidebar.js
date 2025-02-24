@@ -72,7 +72,7 @@ const items = [
 function handleLogout() {
   localStorage.removeItem("token");
 
-  redirect("/login");
+  redirect("/");
 }
 
 export function SopirSidebar() {

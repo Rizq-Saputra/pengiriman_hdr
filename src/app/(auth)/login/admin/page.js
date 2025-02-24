@@ -11,11 +11,10 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff,ArrowLeft } from "lucide-react";
 import { useSwal, showPostRedirectAlert } from "@/hooks/use-swal"; // Import useSwal
 import Image from "next/image"; // Import Image dari Next.js
 
@@ -100,9 +99,14 @@ export default function Login() {
         background: "linear-gradient(135deg, #2C3192, #EC1F25)",
       }}
     >
-      <VeryTopBackButton />
       <Card className="w-full max-w-md bg-[#F3F2F7] shadow-lg">
-        <CardHeader className="flex flex-col items-center">
+      <CardHeader className="flex flex-col items-center relative w-full">
+          <button
+            className="absolute left-0 top-0 p-2 text-[#2C3192]"
+            onClick={() => window.history.back()}
+          >
+            <ArrowLeft size={24} />
+          </button>
           {/* Logo */}
           <div className="mb-4">
             <Image

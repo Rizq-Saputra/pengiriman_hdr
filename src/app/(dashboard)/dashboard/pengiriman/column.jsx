@@ -1,6 +1,6 @@
 "use client";
 import { MoreHorizontal } from "lucide-react";
-import { Pencil, Trash2, Phone } from "lucide-react";
+import { Pencil, Trash2, Phone, CircleX, CircleCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -51,6 +51,7 @@ const ActionCell = ({ row, onRefresh }) => {
           text: "Terjadi kesalahan saat menghapus data. Silahkan coba lagi.",
           icon: "error",
         });
+        console.error("Error deleting data:", error);
       }
     } catch (error) {
       showAlert({
@@ -63,77 +64,70 @@ const ActionCell = ({ row, onRefresh }) => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
+    <div className="flex items-center gap-2">
+      {/* Tombol WhatsApp */}
+      <Link
+        href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
+          "08",
+          "628"
+        )}&text=${encodeURIComponent(
+          `Halo ${data.Pelanggan.nama_pelanggan}, terima kasih telah berbelanja di UD Haderah Sempaja. Berikut kami informasikan nomor resi pengiriman Anda:\n\n *${data.resi}* \n\n(Tekan dan tahan untuk menyalin)\n\nSilakan gunakan nomor resi ini untuk melacak pesanan Anda pada link berikut:\n🔗 https://haderah.vercel.app/\n\nJika ada pertanyaan, jangan ragu untuk menghubungi kami. Terima kasih!`
+        )}`}
+        passHref
+        target="_blank"
+      >
+        <Button variant="ghost" className="h-8 w-8 p-0 text-green-600">
+          <Phone className="h-4 w-4" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <Link href={`/dashboard/pengiriman/${data.pengiriman_id}/edit`}>
-          <DropdownMenuItem className="text-yellow-600 cursor-pointer">
-            <Pencil /> Edit
-          </DropdownMenuItem>
-        </Link>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem
-              className="text-red-600 cursor-pointer"
-              onSelect={(e) => e.preventDefault()}
-            >
-              <Trash2 /> Hapus
-            </DropdownMenuItem>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Anda yakin menghapus data ini?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Data ini akan dihapus secara permanen. Anda tidak dapat
-                mengembalikan data yang telah dihapus.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Batalkan</AlertDialogCancel>
-              <AlertDialogAction
-                className="bg-red-600 hover:bg-red-700"
-                onClick={() => {
-                  handleDelete(data.pengiriman_id);
-                }}
-              >
-                Hapus Data
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        {/* {data.bukti_pengiriman && (
-          <Link href={data.bukti_pengiriman} passHref>
-            <DropdownMenuItem as="a" target="_blank">
-              Bukti Pengiriman
+      </Link>
+
+      {/* Dropdown Menu */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <Link href={`/dashboard/pengiriman/${data.pengiriman_id}/edit`}>
+            <DropdownMenuItem className="text-yellow-600 cursor-pointer">
+              <Pencil className="h-4 w-4 mr-2" /> Edit
             </DropdownMenuItem>
           </Link>
-        )} */}
-        <Link
-          href={`https://api.whatsapp.com/send?phone=${data.Pelanggan.no_telepon.replace(
-            "08",
-            "628"
-          )}&text=${encodeURIComponent(
-            `Halo ${data.Pelanggan.nama_pelanggan}, terima kasih telah berbelanja di UD Haderah Sempaja. Berikut kami informasikan nomor resi pengiriman Anda:\n\n *${data.resi}* \n\n(Tekan dan tahan untuk menyalin)\n\nSilakan gunakan nomor resi ini untuk melacak pesanan Anda pada link berikut:\n🔗 https://haderah.vercel.app/\n\nJika ada pertanyaan, jangan ragu untuk menghubungi kami. Terima kasih!`
-          )}`}
-          passHref
-        >
-          <DropdownMenuItem
-            as="a"
-            className="text-green-600 cursor-pointer"
-            target="_blank"
-          >
-            <Phone /> Whatsapp Pelanggan
-          </DropdownMenuItem>
-        </Link>
-      </DropdownMenuContent>
-    </DropdownMenu>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem
+                className="text-red-600 cursor-pointer"
+                onSelect={(e) => e.preventDefault()}
+              >
+                <Trash2 className="h-4 w-4 mr-2" /> Hapus
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Anda yakin menghapus data ini?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Data ini akan dihapus secara permanen. Anda tidak dapat
+                  mengembalikan data yang telah dihapus.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Batalkan</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-600 hover:bg-red-700"
+                  onClick={() => handleDelete(data.pengiriman_id)}
+                >
+                  Hapus Data
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 
@@ -186,7 +180,7 @@ export const columns = [
       return (
         <span
           className={`px-2 py-1 text-xs font-semibold rounded-full whitespace-nowrap ${
-            statusData === STATUS_PENGIRIMAN.BELUM_DIKIRIM
+            statusData === STATUS_PENGIRIMAN.DIBATALKAN
               ? "bg-red-200 text-red-800"
               : statusData === STATUS_PENGIRIMAN.DALAM_PENGIRIMAN
               ? "bg-yellow-200 text-yellow-800"

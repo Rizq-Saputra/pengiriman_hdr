@@ -11,13 +11,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { VeryTopBackButton } from "@/components/ui/very-top-back-button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSwal } from "@/hooks/use-swal";
 import { z } from "zod";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 // Define Zod schema for validation
 const loginSchema = z.object({
@@ -93,10 +92,20 @@ export default function LoginSopir() {
   };
 
   return (
-    <div className="grid place-items-center min-h-screen p-8 bg-gradient-to-br from-blue-500 to-red-500">
-      <VeryTopBackButton />
+    <div
+    className="min-h-screen flex items-center justify-center p-8"
+    style={{
+      background: "linear-gradient(135deg, #2C3192, #EC1F25)",
+    }}
+  >
       <Card className="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
-        <CardHeader className="flex flex-col items-center">
+        <CardHeader className="flex flex-col items-center relative w-full">
+          <button
+            className="absolute left-0 top-0 p-2 text-[#2C3192]"
+            onClick={() => window.history.back()}
+          >
+            <ArrowLeft size={24} />
+          </button>
           {/* Logo */}
           <div className="mb-4">
             <Image
