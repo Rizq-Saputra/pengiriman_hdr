@@ -272,7 +272,13 @@ export default function DeliveryDetails({ id }) {
           >
             {data.status_pengiriman}
           </Badge>
-          <Badge className="p-2 cursor-pointer">{data.pembayaran}</Badge>
+          <Badge className="p-2 cursor-pointer"  variant={
+              data.pembayaran === "Transfer"
+                ? "warning"
+                : data.pembayaran === "Lunas"
+                ? "success"
+                : "destructive"
+            }>{data.pembayaran}</Badge>
           <Link
             href={`https://wa.me/${data.Pelanggan.no_telepon.replace(
               "08",

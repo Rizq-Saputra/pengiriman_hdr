@@ -71,7 +71,7 @@ const ActionCell = ({ row, onRefresh }) => {
           "08",
           "628"
         )}&text=${encodeURIComponent(
-          `Halo ${data.Pelanggan.nama_pelanggan}, terima kasih telah berbelanja di UD Haderah Sempaja. Berikut kami informasikan nomor resi pengiriman Anda:\n\n *${data.resi}* \n\n(Tekan dan tahan untuk menyalin)\n\nSilakan gunakan nomor resi ini untuk melacak pesanan Anda pada link berikut:\n🔗 https://haderah.vercel.app/\n\nJika ada pertanyaan, jangan ragu untuk menghubungi kami. Terima kasih!`
+          `Halo ${data.Pelanggan.nama_pelanggan}, terima kasih telah berbelanja di UD Haderah Sempaja. Berikut kami informasikan nomor resi pengiriman Anda:\n\n *${data.resi}* \n\n\nSilakan gunakan nomor resi ini untuk melacak pesanan Anda pada link berikut:\n🔗 https://haderah.vercel.app/\n\nJika ada pertanyaan, jangan ragu untuk menghubungi kami. Terima kasih`
         )}`}
         passHref
         target="_blank"
