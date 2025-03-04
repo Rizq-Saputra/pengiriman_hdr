@@ -14,16 +14,11 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { Button } from "@/components/ui/button";
 
-// Fungsi untuk mengambil total pengiriman
+// Function to fetch total deliveries
 const fetchTotalPengiriman = async (weekOffset = 0) => {
   const response = await fetchWithAuth(
     `/api/pengiriman/minggu-ini?weekOffset=${weekOffset}`
@@ -36,7 +31,7 @@ const fetchTotalPengiriman = async (weekOffset = 0) => {
   return total;
 };
 
-// Fungsi untuk mengambil data chart
+// Function to fetch chart data
 const fetchChartData = async (weekOffset = 0) => {
   try {
     const response = await fetchWithAuth(
@@ -61,7 +56,7 @@ const fetchChartData = async (weekOffset = 0) => {
   }
 };
 
-// Fungsi untuk mendapatkan tanggal dalam seminggu
+// Function to get dates in a week
 const getWeekDates = (weekOffset = 0) => {
   const today = new Date();
   const monday = new Date(today);
@@ -82,18 +77,18 @@ const getWeekDates = (weekOffset = 0) => {
       ],
       date: day.toISOString().split("T")[0],
       tanggal: day.getDate(),
-      data: 0,
     });
   }
   return week;
 };
 
-// Konfigurasi chart
-const chartConfig = {
-  jumlahPengiriman: {
-    label: "Jumlah Pengiriman",
-    color: "#2C3192",
-  },
+// Function to get month name in Indonesian
+const getMonthName = (date) => {
+  const months = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+  return months[date.getMonth()];
 };
 
 export default function Dashboard() {
@@ -103,7 +98,7 @@ export default function Dashboard() {
   const [weekOffset, setWeekOffset] = useState(0);
   const isMobile = useIsMobile();
 
-  // Ambil data total pengiriman dan data chart
+  // Fetch total deliveries and chart data
   useEffect(() => {
     const getData = async () => {
       try {
@@ -123,15 +118,17 @@ export default function Dashboard() {
     getData();
   }, [weekOffset]);
 
-  // Handler untuk tombol "Minggu Sebelumnya"
+  // Handler for "Previous Week" button
   const handlePreviousWeek = () => {
     setWeekOffset((prev) => prev + 1);
   };
 
-  // Handler untuk tombol "Minggu Selanjutnya"
+  // Handler for "Next Week" button
   const handleNextWeek = () => {
     setWeekOffset((prev) => Math.max(0, prev - 1));
   };
+
+  const currentMonth = getMonthName(new Date(new Date().setDate(new Date().getDate() - weekOffset * 7)));
 
   if (loading) {
     return (
@@ -156,6 +153,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 w-full">
+
       {/* Card Total Pengiriman */}
       <Card className="text-center max-w-xs md:max-w-full mb-8">
         <CardHeader>
@@ -179,6 +177,7 @@ export default function Dashboard() {
             Selanjutnya
           </Button>
         </div>
+        <h2 className="text-2xl font-bold text-center mb-4">{currentMonth}</h2>
         <div className="w-full flex justify-center mt-4">
           <div className="w-full max-w-3xl">
             <BarChart
@@ -200,7 +199,6 @@ export default function Dashboard() {
                   `${value}\n${chartData[index]?.tanggal || ""}`
                 }
               />
-
               <YAxis hide />
               <Tooltip />
               <Legend />

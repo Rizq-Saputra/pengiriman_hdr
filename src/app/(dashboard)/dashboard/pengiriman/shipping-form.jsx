@@ -41,7 +41,7 @@ export default function ShippingForm({ initialData, mode }) {
   const [items, setItems] = React.useState(
     initialData?.data?.DetailPengiriman.map((item) => ({
       ...item,
-      barang_id: item.barang_id.toString(), // Konversi ke string
+      barang_id: item.barang_id
     })) || [{ jumlah_barang: 0, barang_id: "" }]
   );
 
@@ -118,16 +118,16 @@ export default function ShippingForm({ initialData, mode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     if (mode === "edit") {
       const initialItems = initialData.data.DetailPengiriman || [];
       const currentItems = items;
-  
+
       const itemsToAdd = currentItems.filter(
         (item) =>
           !item.detail_pengiriman_id && item.barang_id && item.jumlah_barang > 0
       );
-  
+
       const itemsToUpdate = currentItems.filter((item) => {
         const initialItem = initialItems.find(
           (initialItem) =>
@@ -139,7 +139,7 @@ export default function ShippingForm({ initialData, mode }) {
             initialItem.barang_id !== item.barang_id)
         );
       });
-  
+
       const itemsToRemove = initialItems.filter(
         (initialItem) =>
           !currentItems.some(
@@ -147,7 +147,7 @@ export default function ShippingForm({ initialData, mode }) {
               item.detail_pengiriman_id === initialItem.detail_pengiriman_id
           )
       );
-  
+
       try {
         const data = {
           tanggal_pengiriman: initialData.data.tanggal_pengiriman,
@@ -156,15 +156,12 @@ export default function ShippingForm({ initialData, mode }) {
           deskripsi: deskripsi,
           pembayaran: pembayaran,
           ongkir: ongkir,
-          total: items.reduce(
-            (acc, item) => acc + (item.subtotal || 0),
-            0
-          ),
+          total: items.reduce((acc, item) => acc + (item.subtotal || 0), 0),
           kendaraan_id: parseInt(kendaraan),
           supir_id: parseInt(supir),
           pelanggan_id: parseInt(pelanggan),
         };
-  
+
         // Update main shipment data
         const response = await fetchWithAuth(
           `/api/pengiriman/${initialData.data.pengiriman_id}`,
@@ -173,11 +170,11 @@ export default function ShippingForm({ initialData, mode }) {
             body: JSON.stringify(data),
           }
         );
-  
+
         if (response.ok) {
           // Handle item changes
           const itemRequests = [];
-  
+
           // Add new items
           if (itemsToAdd.length > 0) {
             itemRequests.push(
@@ -193,7 +190,7 @@ export default function ShippingForm({ initialData, mode }) {
               })
             );
           }
-  
+
           // Update changed items
           if (itemsToUpdate.length > 0) {
             itemsToUpdate.forEach((item) => {
@@ -212,7 +209,7 @@ export default function ShippingForm({ initialData, mode }) {
               );
             });
           }
-  
+
           // Remove deleted items
           if (itemsToRemove.length > 0) {
             itemsToRemove.forEach((item) => {
@@ -226,7 +223,7 @@ export default function ShippingForm({ initialData, mode }) {
               );
             });
           }
-  
+
           // Execute all item requests
           await Promise.all(itemRequests);
           showPostRedirectAlert({
@@ -341,7 +338,7 @@ export default function ShippingForm({ initialData, mode }) {
                       {item.barang_id
                         ? barangList.find(
                             (barang) =>
-                              barang.barang_id.toString() === item.barang_id
+                              barang.barang_id === Number(item.barang_id)
                           )?.nama_barang
                         : "Pilih barang"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
